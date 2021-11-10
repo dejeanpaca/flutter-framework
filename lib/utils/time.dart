@@ -53,7 +53,14 @@ extension TimeDateUtils on DateTime {
 
   /// return same time that occurs on the given day
   DateTime getOnDay(DateTime today) {
-    return DateTime(today.year, today.month, today.day, this.hour, this.minute, this.second, this.millisecond);
+    return DateTime(
+      today.year,
+      today.month,
+      today.day,
+      this.hour,
+      this.minute,
+      this.second,
+      this.millisecond,);
   }
 
   /// return DateTime as a TimeOfDay
@@ -75,6 +82,11 @@ extension DurationUtils on Duration {
   String formatHm() {
     var d = DateTime(1970, 1, 1, 0, 0, this.inSeconds);
     return DateFormat.Hm().format(d);
+  }
+
+  /// returns elapsed time in seconds
+  double elapsed() {
+    return inMicroseconds / 1000 / 1000;
   }
 }
 
