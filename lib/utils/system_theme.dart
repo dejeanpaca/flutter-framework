@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void setSystemOverlayStyle(Color color) {
+void setSystemOverlayStyle({Color? navbarColor, Color? statusBarcolor = Colors.transparent}) {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: color,
-    statusBarColor: Colors.transparent,
-   ));
+    systemNavigationBarColor: navbarColor,
+    statusBarColor: statusBarcolor,
+  ));
 }
