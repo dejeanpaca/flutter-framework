@@ -23,6 +23,8 @@ class Themes {
   /// list of themes used with theme indexes
   static List<AppTheme?> themes = [null, null];
 
+  static List<Function> onApplyTheme = [];
+
   /// get theme mode based on settings
   static ThemeMode getMode() {
     if (themePreference == 'system') return ThemeMode.system;
@@ -32,13 +34,18 @@ class Themes {
     return ThemeMode.light;
   }
 
+  /// get app theme index based on settings
+  static int getAppThemeIndex() {
+    if (themePreference == 'system') return THEME_LIGHT;
+
+    if (themePreference == 'dark') return THEME_DARK;
+
+    return THEME_LIGHT;
+  }
+
   /// get app theme based on settings
   static AppTheme getAppTheme() {
-    if (themePreference == 'system') return themes[THEME_LIGHT]!;
-
-    if (themePreference == 'dark') return themes[THEME_DARK]!;
-
-    return themes[THEME_LIGHT]!;
+    return themes[getAppThemeIndex()]!;
   }
 
   /// set theme with the given theme index
@@ -51,8 +58,19 @@ class Themes {
   }
 
   /// apply current theme
+  static void applyThemeFromPreference(BuildContext context) {
+    var index = getAppThemeIndex();
+    setTheme(index);
+    applyTheme(context);
+  }
+
+  /// apply current theme
   static void applyTheme(BuildContext context) {
     DynamicThemeMode.of(context)!.setThemeData(theme);
+
+    for (var f in onApplyTheme) {
+      f();
+    }
   }
 
   /// We use this method to set  which app theme we use for a given brightness.
