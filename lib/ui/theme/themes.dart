@@ -25,6 +25,19 @@ class Themes {
 
   static List<Function> onApplyTheme = [];
 
+  /// does the current device seem like a tablet
+  static bool isTablet = false;
+
+  /// determine initial state and parameters for the app
+  static void initial(BuildContext context) {
+    var shortestSide = MediaQuery
+        .of(context)
+        .size
+        .shortestSide;
+
+    isTablet = shortestSide >= 600;
+  }
+
   /// get theme mode based on settings
   static ThemeMode getMode() {
     if (themePreference == 'system') return ThemeMode.system;
@@ -35,8 +48,17 @@ class Themes {
   }
 
   /// get app theme index based on settings
-  static int getAppThemeIndex() {
-    if (themePreference == 'system') return THEME_LIGHT;
+  static int getAppThemeIndex({Brightness? brightness}) {
+    if (themePreference == 'system') {
+      if (brightness != null) {
+        if (brightness == Brightness.light)
+          return THEME_LIGHT;
+        else if (brightness == Brightness.dark)
+          return THEME_DARK;
+      }
+
+      return THEME_LIGHT;
+    }
 
     if (themePreference == 'dark') return THEME_DARK;
 
@@ -44,8 +66,8 @@ class Themes {
   }
 
   /// get app theme based on settings
-  static AppTheme getAppTheme() {
-    return themes[getAppThemeIndex()]!;
+  static AppTheme getAppTheme({Brightness? brightness}) {
+    return themes[getAppThemeIndex(brightness: brightness)]!;
   }
 
   /// set theme with the given theme index
@@ -59,7 +81,11 @@ class Themes {
 
   /// apply current theme
   static void applyThemeFromPreference(BuildContext context) {
-    var index = getAppThemeIndex();
+    var brightness = MediaQuery
+        .of(context)
+        .platformBrightness;
+
+    var index = getAppThemeIndex(brightness: brightness);
     setTheme(index);
     applyTheme(context);
   }
