@@ -50,3 +50,19 @@ Future<bool> saveJson<T>(String fileName, T what) async {
 
   return result;
 }
+
+/// delete the given file and prevent exceptions
+Future<bool> deleteFile(path) async {
+  var ok = false;
+
+  var f = File(path);
+
+  try {
+    await f.delete();
+    ok = true;
+  } catch (e) {
+
+  }
+
+  return ok;
+}
