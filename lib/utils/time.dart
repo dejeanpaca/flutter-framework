@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import '/localizations/localization.dart';
 
 extension TimeDateUtils on DateTime {
+  static DateTime zero = DateTime(1970, 1, 1, 0, 0, 0);
+
   bool isSameDay(DateTime other) {
     return this.year == other.year && this.month == other.month && this.day == other.day;
   }
@@ -108,6 +110,11 @@ extension TimeDateUtils on DateTime {
       return '$y-$m-${d}T$h:$min:${sec}Z';
     else
       return '$y-$m-${d}T$h:$min:$sec';
+  }
+
+  /// get total days in this month
+  static int daysInMonth(int month, {int year = 2022}) {
+    return DateTime(year, month + 1, 0).day;
   }
 }
 
