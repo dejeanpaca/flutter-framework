@@ -11,7 +11,7 @@ class JsonUtils {
     return defaultValue;
   }
 
-  /// get int from a string/int, with a default 0 if value is not a valid int (no exception is raised)
+  /// get int from a string/int, or return given default if value is not a valid int (no exception is raised)
   static int getInt(dynamic value, int defaultValue) {
     if (value == null) return defaultValue;
 
@@ -25,7 +25,7 @@ class JsonUtils {
     return defaultValue;
   }
 
-  /// get int from a string/int, with a default 0 if value is not a valid int (no exception is raised)
+  /// get double from a string/double, or return given default if value is not a valid double (no exception is raised)
   static double getDouble(dynamic value, double defaultValue) {
     if (value == null) return defaultValue;
 
@@ -39,7 +39,7 @@ class JsonUtils {
     return defaultValue;
   }
 
-  /// get int from a string/int, with a default 0 if value is not a valid int (no exception is raised)
+  /// get DateTime from a string, or return given default if value is not a valid DateTime (no exception is raised)
   static DateTime getDateTime(dynamic value, DateTime defaultValue) {
     if (value == null) return defaultValue;
 
@@ -55,7 +55,7 @@ class JsonUtils {
     return defaultValue;
   }
 
-  /// get int from a string/int, with a default 0 if value is not a valid int (no exception is raised)
+  /// get DateTime? from a string, or return given default if value is not a valid DateTime? (no exception is raised)
   static DateTime? getDateTimeNullable(dynamic value, DateTime? defaultValue) {
     if (value == null) return defaultValue;
 
@@ -71,6 +71,7 @@ class JsonUtils {
     return defaultValue;
   }
 
+  /// get bool from a string/bool, or return given default if value is not a valid bool (no exception is raised)
   static bool getBool(dynamic value, bool defaultValue) {
     if (value == null) return defaultValue;
 
