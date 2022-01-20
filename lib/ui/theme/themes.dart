@@ -20,9 +20,13 @@ class Themes {
   /// is the current theme dark
   static bool isDark = false;
 
-  /// list of themes used with theme indexes
+  /// list of themes used with theme indexes [light, dark]
+  static List<AppTheme?> systemThemes = [null, null];
+
+  /// list of themes used with theme indexes [light, dark]
   static List<AppTheme?> themes = [null, null];
 
+  /// called when theme is applied
   static List<Function> onApplyTheme = [];
 
   /// does the current device seem like a tablet
@@ -67,11 +71,28 @@ class Themes {
 
   /// get app theme based on settings
   static AppTheme getAppTheme({Brightness? brightness}) {
-    return themes[getAppThemeIndex(brightness: brightness)]!;
+    var index = getAppThemeIndex(brightness: brightness);
+
+    if (themePreference == 'system') {
+      // return system theme if a list is set
+      if (systemThemes[0] != null)
+        return systemThemes[index]!;
+    }
+
+    return themes[index]!;
   }
 
   /// set theme with the given theme index
-  static void setTheme(int themeIndex) {
+  static void setTheme(AppTheme theme) {
+    current = theme;
+    Themes.theme = current.theme;
+    isDark = (current.isDark);
+
+    print('Theme set: ' + current.name);
+  }
+
+  /// set theme with the given theme index
+  static void setThemeIndex(int themeIndex) {
     current = themes[themeIndex]!;
     theme = current.theme;
     isDark = (current.isDark);
@@ -85,8 +106,9 @@ class Themes {
         .of(context)
         .platformBrightness;
 
-    var index = getAppThemeIndex(brightness: brightness);
-    setTheme(index);
+    var theme = getAppTheme(brightness: brightness);
+
+    setTheme(theme);
     applyTheme(context);
   }
 
@@ -99,17 +121,6 @@ class Themes {
     }
   }
 
-  /// We use this method to set  which app theme we use for a given brightness.
-  /// This may sometimes be required if we're using the `system` theme.
-  static void setCurrentFromBrightness(Brightness brightness) {
-    if (getMode() == ThemeMode.system) {
-      var which = getAppThemeFromBrightness(brightness);
-      setTheme(which);
-    } else if (getMode() == ThemeMode.dark)
-      setTheme(THEME_DARK);
-    else
-      setTheme(THEME_LIGHT);
-  }
 
   /// We use this method to determine which app theme to use for a given brightness.
   /// This may sometimes be required if we're using the `system` theme to detect what app theme to use.
