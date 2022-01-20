@@ -62,8 +62,21 @@ extension TimeDateUtils on DateTime {
       this.hour,
       this.minute,
       this.second,
-      this.millisecond,);
+      this.millisecond,
+    );
   }
+
+  /// return same date that occurs with the given time of day
+  DateTime withTimeOfDay(TimeOfDay time) {
+    return DateTime(
+      this.year,
+      this.month,
+      this.day,
+      time.hour,
+      time.minute,
+    );
+  }
+
 
   /// return DateTime as a TimeOfDay
   TimeOfDay getTimeOfDay() {
