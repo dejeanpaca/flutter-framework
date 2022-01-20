@@ -25,6 +25,20 @@ class JsonUtils {
     return defaultValue;
   }
 
+  /// get int from a string/int, or return given default if value is not a valid int (no exception is raised)
+  static int? getIntNullable(dynamic value, int? defaultValue) {
+    if (value == null) return defaultValue;
+
+    if (value is String) {
+      var v = int.tryParse(value);
+      return v;
+    } else if (value is int) {
+      return value;
+    }
+
+    return defaultValue;
+  }
+
   /// get double from a string/double, or return given default if value is not a valid double (no exception is raised)
   static double getDouble(dynamic value, double defaultValue) {
     if (value == null) return defaultValue;
