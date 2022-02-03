@@ -167,7 +167,7 @@ String getYearMonthRepresentation(DateTime month, {DateTime? today}) {
 }
 
 /// represent time in a relative fashion
-String getTimeRepresentation(DateTime day, DateTime today, {bool useFormat = true, String format = 'd. EEEE'}) {
+String getMonthlyTimeRepresentation(DateTime day, DateTime today, {bool useFormat = true, String format = 'd. EEEE'}) {
   var caption = 'Today';
   var localizedFormat = DateFormat(format).format(day);
   if (useFormat) caption = caption + ' ($localizedFormat)';
