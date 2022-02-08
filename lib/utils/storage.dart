@@ -1,12 +1,16 @@
 import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 var documentsPath = '';
 var temporaryPath = '';
 
 Future<void> setupPaths() async {
-  documentsPath = await getDocumentsPath();
-  var dir = await getTemporaryDirectory();
+  var dir = await getApplicationDocumentsDirectory();
+  documentsPath = dir.path;
+
+  dir = await getTemporaryDirectory();
   temporaryPath = dir.path;
+
   print('Documents path: ' + documentsPath);
   print('Temporary files path: ' + temporaryPath);
 }
