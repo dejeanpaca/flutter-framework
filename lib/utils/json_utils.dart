@@ -46,6 +46,8 @@ class JsonUtils {
     if (value is String) {
       var v = double.tryParse(value);
       return v != null ? v : defaultValue;
+    } else if (value is int) {
+      var v = value.toDouble();
     } else if (value is double) {
       return value;
     }
