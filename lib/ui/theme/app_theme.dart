@@ -10,4 +10,8 @@ class AppTheme {
     this.name = name;
     this.theme = theme;
   }
+
+  void construct() {
+
+  }
 }
