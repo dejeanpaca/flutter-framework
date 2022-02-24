@@ -133,6 +133,7 @@ extension TimeDateUtils on DateTime {
 
 /// extensions for TimeOfDay
 extension TimeOfDayUtils on TimeOfDay {
+  /// get ToD formatted as a time string
   String getTimeString() {
     return this.hour.toString() + ':' + this.minute.toString().padLeft(2, '0');
   }
@@ -141,6 +142,26 @@ extension TimeOfDayUtils on TimeOfDay {
   /// Sets year, month and day from now, and only hour and minute from this TimeOfDay.
   DateTime getTime(DateTime now) {
     return DateTime(now.year, now.month, now.day, this.hour, this.minute);
+  }
+
+  /// checks if this ToD is before the other
+  bool isBefore(TimeOfDay other) {
+    return toDouble() < other.toDouble();
+  }
+
+  /// checks if this ToD is before the other
+  bool isAfter(TimeOfDay other) {
+    return toDouble() > other.toDouble();
+  }
+
+  /// convert a ToD value to double
+  double toDouble() {
+    return hour + minute / 60.0;
+  }
+
+  /// create a new instance with the same values
+  TimeOfDay copy() {
+    return TimeOfDay(hour: hour, minute: minute);
   }
 }
 
