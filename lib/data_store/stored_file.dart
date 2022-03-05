@@ -38,7 +38,7 @@ class StoredFile {
   }
 
   /// delete the stored file managed by this handler
-  Future<void> deleteFile() async {
+  Future<bool> deleteFile() async {
     // delete file
     var f = File(getPath());
 
@@ -48,8 +48,11 @@ class StoredFile {
         print('Deleted file: ${f.path}');
       } catch (e) {
         print('Failed to delete file: ${f.path}');
+        return false;
       }
     }
+
+    return true;
   }
 }
 
@@ -61,9 +64,11 @@ class StoredDataFile extends StoredFile {
   }
 
   @override
-  Future<void> deleteFile() async {
+  Future<bool> deleteFile() async {
     if (await DataStore.dataStorePathExists()) {
-      await super.deleteFile();
+      return await super.deleteFile();
     }
+
+    return true;
   }
 }
