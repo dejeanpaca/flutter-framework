@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'app_theme.dart';
 import 'dynamic_theme.dart';
+import 'size_config.dart';
 
 class Themes {
   static const int THEME_LIGHT = 0;
@@ -40,6 +41,8 @@ class Themes {
         .shortestSide;
 
     isTablet = shortestSide >= 600;
+
+    SizeConfig.initialize(context);
   }
 
   /// get theme mode based on settings
