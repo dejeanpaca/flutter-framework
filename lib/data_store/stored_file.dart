@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:framework/utils/json_storage.dart';
+import 'package:framework/utils/json_storage.dart' as jsonStorage;
 import 'package:framework/utils/storage.dart';
 import 'data_store.dart';
 
@@ -19,12 +19,15 @@ class StoredFile {
   /// convert to json
   Map<String, dynamic> toJson() => {};
 
+  /// read json
+  loadJson(Map<String, dynamic> jsn) {}
+
   /// save this file
   Future<void> save() async {}
 
   /// save this file
   Future<bool> saveFile<T>(T what) async {
-    return await saveJson(getPath(), what);
+    return await jsonStorage.saveJson(getPath(), what);
   }
 
   /// called only when the json file is loaded
@@ -32,7 +35,7 @@ class StoredFile {
 
   /// load this file
   Future<void> load() async {
-    var json = await loadJson(getPath());
+    var json = await jsonStorage.loadJson(getPath());
 
     if (json != null) onLoad(json);
   }
@@ -65,7 +68,7 @@ class StoredDataFile extends StoredFile {
 
   @override
   Future<bool> deleteFile() async {
-    if (await DataStore.dataStorePathExists()) {
+    if (await DataStore.pathExists()) {
       return await super.deleteFile();
     }
 

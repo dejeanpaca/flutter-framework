@@ -13,14 +13,16 @@ class DataStore {
     return documentsPath + '/data';
   }
 
-  static Future<bool> dataStorePathExists() async {
+  /// does the data store path exists
+  static Future<bool> pathExists() async {
     var path = getPath();
     var d = Directory(path);
 
     return await d.exists();
   }
 
-  static Future<bool> createDataStorePath() async {
+  /// creates the data store path
+  static Future<bool> createPath() async {
     var path = getPath();
     var d = Directory(path);
 
@@ -42,5 +44,13 @@ class DataStore {
 
     // directory already exists
     return true;
+  }
+
+  /// deletes all files from the data store
+  static Future<void> clear() async {
+    // delete data store
+    var d = Directory(DataStore.getPath());
+
+    if (await d.exists()) await d.delete(recursive: true);
   }
 }
