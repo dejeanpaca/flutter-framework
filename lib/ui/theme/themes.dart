@@ -104,7 +104,7 @@ class Themes {
   }
 
   /// apply current theme
-  static void applyThemeFromPreference(BuildContext context) {
+  static void applyThemeFromPreference(BuildContext context, {bool callOnApply = true}) {
     var brightness = MediaQuery
         .of(context)
         .platformBrightness;
@@ -112,18 +112,21 @@ class Themes {
     var theme = getAppTheme(brightness: brightness);
 
     setTheme(theme);
-    applyTheme(context);
+    applyTheme(context, callOnApply: callOnApply);
   }
 
   /// apply current theme
-  static void applyTheme(BuildContext context) {
+  static void applyTheme(BuildContext context, {bool callOnApply = true}) {
     DynamicThemeMode.of(context)!.setThemeData(theme);
 
+    if (callOnApply) callOnApplyTheme();
+  }
+
+  static void callOnApplyTheme() {
     for (var f in onApplyTheme) {
       f();
     }
   }
-
 
   /// We use this method to determine which app theme to use for a given brightness.
   /// This may sometimes be required if we're using the `system` theme to detect what app theme to use.
