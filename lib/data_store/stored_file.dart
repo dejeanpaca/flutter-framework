@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:framework/utils/json_storage.dart' as jsonStorage;
 import 'package:framework/utils/storage.dart';
+
 import 'data_store.dart';
 
 class StoredFile {
@@ -23,7 +24,9 @@ class StoredFile {
   loadJson(Map<String, dynamic> jsn) {}
 
   /// save this file
-  Future<void> save() async {}
+  Future<void> save() async {
+    await saveFile(this);
+  }
 
   /// save this file
   Future<bool> saveFile<T>(T what) async {
@@ -31,13 +34,15 @@ class StoredFile {
   }
 
   /// called only when the json file is loaded
-  Future<void> onLoad(Map<String, dynamic> json) async {}
+  Future<void> onLoad(Map<String, dynamic> json) async {
+    loadJson(json);
+  }
 
   /// load this file
   Future<void> load() async {
     var json = await jsonStorage.loadJson(getPath());
 
-    if (json != null) onLoad(json);
+    if (json != null) await onLoad(json);
   }
 
   /// delete the stored file managed by this handler
