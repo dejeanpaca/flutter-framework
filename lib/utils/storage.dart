@@ -30,3 +30,21 @@ Future<bool> deleteFile(path) async {
 
   return ok;
 }
+
+Future<bool> saveFileAsString(String fileName, String contents) async {
+  final File file = File(fileName);
+
+  bool result;
+
+  try {
+    file.writeAsString(contents);
+
+    result = true;
+  } catch (e) {
+    print(e.toString());
+
+    result = false;
+  }
+
+  return result;
+}
