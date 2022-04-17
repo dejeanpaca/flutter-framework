@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-Future<Map<String, dynamic>?> loadJson(String fileName) async {
+Future<Map<String, dynamic>?> loadJson(String fileName, {bool logVerbose = false}) async {
   File file = new File(fileName);
 
   Map<String, dynamic>? result;
 
   if (await file.exists() == false) {
-    print('load > Does not exist: ' + fileName);
+    if (logVerbose) print('load > Does not exist: ' + fileName);
     return null;
   }
 
@@ -16,17 +16,17 @@ Future<Map<String, dynamic>?> loadJson(String fileName) async {
 
     result = json.decode(s);
 
-    print('load > json: ' + fileName);
+    if (logVerbose) print('load > json: ' + fileName);
   } catch (e) {
     result = null;
-    print('load > failed: ' + fileName);
+    if (logVerbose) print('load > failed: ' + fileName);
     print(e.toString());
   }
 
   return result;
 }
 
-Future<bool> saveJson<T>(String fileName, T what) async {
+Future<bool> saveJson<T>(String fileName, T what, {bool logVerbose = false}) async {
   File file = new File(fileName);
 
   bool result;
@@ -36,10 +36,10 @@ Future<bool> saveJson<T>(String fileName, T what) async {
 
     file.writeAsString(contents);
 
-    print('save > json: ' + fileName + ' as ' + T.toString());
+    if (logVerbose) print('save > json: ' + fileName + ' as ' + T.toString());
     result = true;
   } catch (e) {
-    print('save > failed: ' + fileName);
+    if (logVerbose) print('save > failed: ' + fileName);
     print(e.toString());
 
     result = false;
