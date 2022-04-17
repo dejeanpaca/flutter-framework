@@ -14,9 +14,6 @@ class StoredFile {
     return documentsPath + '/$fileName';
   }
 
-  /// convert from json to object
-  StoredFile.fromJson(Map<String, dynamic> jsn);
-
   /// convert to json
   Map<String, dynamic> toJson() => {};
 
