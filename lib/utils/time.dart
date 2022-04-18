@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '/localizations/localization.dart';
 
 extension TimeDateUtils on DateTime {
   static DateTime zero = DateTime(1970, 1, 1, 0, 0, 0);
@@ -23,19 +22,19 @@ extension TimeDateUtils on DateTime {
 
   /// is the given month after this one
   bool isMonthAfter(DateTime other) {
-    return (other.year > this.year) || (other.year == this.year && other.month > this.month);
+    return (this.year > other.year) || (this.year == other.year && this.month > other.month);
   }
 
   /// is the given month before this one
   bool isMonthBefore(DateTime other) {
-    return (other.year < this.year) || (other.year == this.year && other.month < this.month);
+    return (this.year < other.year) || (this.year == other.year && this.month < other.month);
   }
 
   /// is this day after a given other
   bool isDayAfter(DateTime other) {
-    return other.year > this.year ||
-        (other.year >= this.year && other.month > this.month) ||
-        (other.year >= this.year && other.month >= this.month && other.day > this.day);
+    return this.year > other.year ||
+        (this.year >= other.year && this.month > other.month) ||
+        (this.year >= other.year && this.month >= other.month && this.day > other.day);
   }
 
   /// is this day after a given other
