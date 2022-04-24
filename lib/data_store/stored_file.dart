@@ -6,10 +6,18 @@ import 'package:framework/utils/storage.dart';
 import 'data_store.dart';
 
 class StoredFile {
+  /// log verbose
+  static bool logVerbose = false;
+
+  /// write files in a safe way
+  static bool safeWrite = true;
+
+  /// name for this file (not the path)
   String fileName = 'file.json';
 
   StoredFile();
 
+  /// get the storage path for this file
   String getPath() {
     return documentsPath + '/$fileName';
   }
@@ -27,7 +35,47 @@ class StoredFile {
 
   /// save this file
   Future<bool> saveFile<T>(T what) async {
-    return await jsonStorage.saveJson(getPath(), what);
+    var filePath = getPath();
+
+    // just write the file
+    if (!safeWrite) {
+      return await jsonStorage.saveJson(filePath, what, logVerbose: logVerbose);
+    }
+
+    // store new file
+    var ok = await jsonStorage.saveJson(filePath + '.new', what, logVerbose: logVerbose);
+
+    if (!ok) return false;
+
+    // rename old file, if one is present
+    var oldF = File(filePath);
+
+    if (await oldF.existsSync()) {
+      File? f;
+
+      try {
+        await oldF.rename(filePath + '.old');
+        ok = true;
+      } catch (e) {
+        print('Failed to rename old file: $filePath to $filePath.old');
+        print(e);
+        return false;
+      };
+    }
+
+    // rename new file to target file
+    var newF = File(filePath + '.new');
+
+    try {
+      await newF.rename(filePath);
+      ok = true;
+    } catch (e) {
+      print('Failed to rename new file: $filePath.new to $filePath');
+      print(e);
+      return false;
+    }
+
+    return ok;
   }
 
   /// called only when the json file is loaded
@@ -37,7 +85,7 @@ class StoredFile {
 
   /// load this file
   Future<void> load() async {
-    var json = await jsonStorage.loadJson(getPath());
+    var json = await jsonStorage.loadJson(getPath(), logVerbose: logVerbose);
 
     if (json != null) await onLoad(json);
   }
