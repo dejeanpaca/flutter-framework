@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+/// some helpful DateTime extensions
 extension TimeDateUtils on DateTime {
   static DateTime zero = DateTime(1970, 1, 1, 0, 0, 0);
 
@@ -127,6 +128,21 @@ extension TimeDateUtils on DateTime {
   /// get total days in this month
   static int daysInMonth(int month, {int year = 2022}) {
     return DateTime(year, month + 1, 0).day;
+  }
+}
+
+/// some helpful nullable DateTime extensions
+extension TimeDateNullableUtils on DateTime? {
+  int compareNullable(DateTime? other) {
+    if (this == null && other == null) {
+      return 0;
+    } else if (this != null && other == null) {
+      return 1;
+    } else if (this == null && other != null) {
+      return -1;
+    } else {
+      return this!.compareTo(other!);
+    }
   }
 }
 
