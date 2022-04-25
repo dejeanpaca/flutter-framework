@@ -137,4 +137,17 @@ class JsonUtils {
 
     return Color(getInt(color, 0));
   }
+
+  /// parse unix time from a double float representation
+  DateTime parseUnixTimef(dynamic jsn) {
+    var timef = JsonUtils.getDouble(jsn, 0);
+
+    var time = DateTime(1970, 1, 1);
+
+    if (timef != 0) {
+      time = DateTime.fromMillisecondsSinceEpoch((timef * 1000).toInt());
+    }
+
+    return time;
+  }
 }
