@@ -139,7 +139,7 @@ class JsonUtils {
   }
 
   /// parse unix time from a double float representation
-  DateTime parseUnixTimef(dynamic jsn) {
+  static DateTime parseUnixTimef(dynamic jsn) {
     var timef = JsonUtils.getDouble(jsn, 0);
 
     var time = DateTime(1970, 1, 1);
