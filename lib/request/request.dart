@@ -27,6 +27,9 @@ class RequestResponse {
   /// http response object
   http.BaseResponse? response;
 
+  /// dio response object used for dio implementations
+  Object? dioResponse;
+
   /// response data as json
   Map<String, dynamic>? jsonResponse;
 
