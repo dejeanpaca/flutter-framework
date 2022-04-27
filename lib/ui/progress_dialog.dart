@@ -23,8 +23,10 @@ class ProgressDialog extends StatefulWidget {
   final String? message;
 
   final ShapeBorder? shape;
+  final EdgeInsets insetPadding;
 
-  ProgressDialog(this.future, {this.message, this.content, this.shape});
+  ProgressDialog(this.future, {this.message, this.content, this.shape, this.insetPadding = const EdgeInsets.symmetric(
+      horizontal: 40.0, vertical: 24.0)});
 
   @override
   State<StatefulWidget> createState() => ProgressDialogState();
@@ -68,10 +70,10 @@ class ProgressDialogState extends State<ProgressDialog> {
           child: Row(mainAxisSize: MainAxisSize.min, children: [
             CircularProgressIndicator(),
             const Padding(padding: const EdgeInsets.only(right: 10.0),),
-            if (widget.message != null) Text(widget.message!),
+            if (widget.message != null) Expanded(child: Text(widget.message!)),
           ])),
     );
 
-    return Dialog(child: content, shape: shape);
+    return Dialog(child: content, shape: shape, insetPadding: widget.insetPadding);
   }
 }
