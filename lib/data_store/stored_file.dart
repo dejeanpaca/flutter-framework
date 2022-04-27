@@ -37,8 +37,10 @@ class StoredFile {
   Future<bool> saveFile<T>(T what) async {
     var filePath = getPath();
 
-    // just write the file
-    if (!safeWrite) {
+    var f = File(filePath);
+
+    // just write the file if not safe mode or file does not exist
+    if (!safeWrite || !f.existsSync()) {
       return await jsonStorage.saveJson(filePath, what, logVerbose: logVerbose);
     }
 
@@ -87,7 +89,7 @@ class StoredFile {
       oldF = File(filePath + '.old');
       await oldF.delete();
     } catch (e) {
-      print('Failed to delete old file: $filePath.new to $filePath');
+      print('Failed to delete old file: $oldF.path');
       print(e);
     }
 
