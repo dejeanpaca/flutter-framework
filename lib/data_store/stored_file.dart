@@ -47,7 +47,14 @@ class StoredFile {
 
     if (!ok) return false;
 
-    // rename old file, if one is present
+    // remove old file, if one is present
+    var existingOldF = File(filePath + '.old');
+
+    if (existingOldF.existsSync()) {
+      existingOldF.deleteSync();
+    }
+
+    // rename current file to old file, if one is present
     var oldF = File(filePath);
 
     if (await oldF.existsSync()) {
@@ -63,7 +70,7 @@ class StoredFile {
       };
     }
 
-    // rename new file to target file
+    // rename new file to current file
     var newF = File(filePath + '.new');
 
     try {
@@ -73,6 +80,15 @@ class StoredFile {
       print('Failed to rename new file: $filePath.new to $filePath');
       print(e);
       return false;
+    }
+
+    // remove old file
+    try {
+      oldF = File(filePath + '.old');
+      await oldF.delete();
+    } catch (e) {
+      print('Failed to delete old file: $filePath.new to $filePath');
+      print(e);
     }
 
     return ok;
