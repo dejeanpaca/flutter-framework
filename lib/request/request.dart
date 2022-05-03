@@ -57,16 +57,15 @@ class Requests {
   static List<String> expectedContentTypes = ['application/json'];
   static Duration timeoutDuration = const Duration(seconds: 3);
 
-  static Future<RequestResponse> request(
-    RequestMethod method,
-    String url, {
-    String? body,
-    Map<String, String>? headers,
-    bool multipart = false,
-    List<http.MultipartFile>? files,
-    List<String>? expectedContentTypes,
-    Duration? timeout,
-  }) async {
+  static Future<RequestResponse> request(RequestMethod method,
+      String url, {
+        String? body,
+        Map<String, String>? headers,
+        bool multipart = false,
+        List<http.MultipartFile>? files,
+        List<String>? expectedContentTypes,
+        Duration? timeout,
+      }) async {
     var uri = Uri.parse(url);
     var result = RequestResponse();
 
@@ -231,13 +230,26 @@ class Requests {
   static bool validateResponse(RequestResponse response, List<String>? expectedContentTypes) {
     expectedContentTypes ??= Requests.expectedContentTypes;
 
-    if (expectedContentTypes.isEmpty || expectedContentTypes.contains(response.contentType)) {
-      response.ok = response.ok && true;
+    var contains = false;
+
+    if (expectedContentTypes != null) {
+      var base = response.contentType;
+
+      for (var type in expectedContentTypes) {
+        if (response.contentType.contains(type)) contains = true;
+      }
+    } else {
+      contains = true;
+    }
+
+
+    if (contains) {
       response.isExpectedContentType = true;
       return true;
     } else {
       // no content, so no content type expected
       if (response.contentLength == 0) {
+        response.isExpectedContentType = true;
         return true;
       }
 
