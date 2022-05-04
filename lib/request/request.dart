@@ -33,6 +33,9 @@ class RequestResponse {
   /// response data as json
   Map<String, dynamic>? jsonResponse;
 
+  /// response data as json
+  List<dynamic>? jsonArray;
+
   /// is the response ok
   bool ok = false;
 
@@ -64,6 +67,7 @@ class Requests {
         bool multipart = false,
         List<http.MultipartFile>? files,
         List<String>? expectedContentTypes,
+        bool isJsonArray = false,
         Duration? timeout,
       }) async {
     var uri = Uri.parse(url);
@@ -208,7 +212,11 @@ class Requests {
 
       if (isJson) {
         try {
-          result.jsonResponse = json.decode(responseBody);
+          if (!isJsonArray) {
+            result.jsonResponse = json.decode(responseBody);
+          } else {
+            result.jsonArray = json.decode(responseBody);
+          }
         } catch (e) {
           result.ok = false;
           print('response > Failed to parse json for $url');
