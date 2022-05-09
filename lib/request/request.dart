@@ -65,7 +65,9 @@ class Requests {
         String? body,
         Map<String, String>? headers,
         bool multipart = false,
+        bool form = false,
         List<http.MultipartFile>? files,
+        Map<String, String>? fields,
         List<String>? expectedContentTypes,
         bool isJsonArray = false,
         Duration? timeout,
@@ -99,6 +101,7 @@ class Requests {
 
         if (headers != null) multipartReq.headers.addAll(headers);
         if (files != null) multipartReq.files.addAll(files);
+        if (files != null) multipartReq.fields.addAll(fields!);
 
         response = await multipartReq.send().timeout(timeoutDuration);
       } else {
