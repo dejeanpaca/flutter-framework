@@ -101,7 +101,7 @@ class Requests {
 
         if (headers != null) multipartReq.headers.addAll(headers);
         if (files != null) multipartReq.files.addAll(files);
-        if (files != null) multipartReq.fields.addAll(fields!);
+        if (fields != null) multipartReq.fields.addAll(fields);
 
         response = await multipartReq.send().timeout(timeoutDuration);
       } else {
@@ -128,8 +128,9 @@ class Requests {
 
         if (response != null) req = response!.request;
       }
-    } catch (e) {
+    } catch (e, s) {
       print('req > exception\n$e');
+      print(s);
 
       if (e is SocketException) {
         if (e.osError != null) result.ioError = e.osError;
