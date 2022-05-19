@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Future<void> showProgressDialog(BuildContext context, Future future,
-    {bool dismissible = false, Widget? content, String? message = 'Please wait ...', ShapeBorder? dialogShape}) async {
+    {bool dismissible = false, Widget? content, String? message = ProgressDialog.defaultMessage, ShapeBorder? dialogShape}) async {
   await showDialog(
     context: context,
     builder: (context) =>
@@ -16,6 +16,8 @@ Future<void> showProgressDialog(BuildContext context, Future future,
 }
 
 class ProgressDialog extends StatefulWidget {
+  static const String defaultMessage = 'Please wait ...';
+
   @required
   final Future future;
 
