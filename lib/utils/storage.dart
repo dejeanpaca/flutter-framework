@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:path_provider/path_provider.dart';
 
 var documentsPath = '';
@@ -37,7 +39,25 @@ Future<bool> saveFileAsString(String fileName, String contents) async {
   bool result;
 
   try {
-    file.writeAsString(contents);
+    file.writeAsString(contents, flush: true);
+
+    result = true;
+  } catch (e) {
+    print(e.toString());
+
+    result = false;
+  }
+
+  return result;
+}
+
+Future<bool> saveFileAsBytes(String fileName, Uint8List bytes) async {
+  final File file = File(fileName);
+
+  bool result;
+
+  try {
+    file.writeAsBytes(bytes, flush: true);
 
     result = true;
   } catch (e) {
