@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 Future<Map<String, dynamic>?> loadJson(String fileName, {bool logVerbose = false}) async {
   File file = new File(fileName);
@@ -38,9 +39,10 @@ Future<bool> saveJson<T>(String fileName, T what, {bool logVerbose = false}) asy
 
     if (logVerbose) print('save > json: ' + fileName + ' as ' + T.toString());
     result = true;
-  } catch (e) {
+  } catch (e, s) {
     if (logVerbose) print('save > failed: ' + fileName);
     print(e.toString());
+    debugPrintStack(stackTrace: s);
 
     result = false;
   }
