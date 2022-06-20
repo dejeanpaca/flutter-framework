@@ -27,7 +27,7 @@ Future<Map<String, dynamic>?> loadJson(String fileName, {bool logVerbose = false
   return result;
 }
 
-Future<bool> saveJson<T>(String fileName, T what, {bool logVerbose = false}) async {
+Future<bool> saveJson<T>(String fileName, T what, {bool logVerbose = false, bool flush = true}) async {
   File file = new File(fileName);
 
   bool result;
@@ -35,7 +35,7 @@ Future<bool> saveJson<T>(String fileName, T what, {bool logVerbose = false}) asy
   try {
     var contents = json.encode(what);
 
-    file.writeAsString(contents);
+    file.writeAsString(contents, flush: flush);
 
     if (logVerbose) print('save > json: ' + fileName + ' as ' + T.toString());
     result = true;

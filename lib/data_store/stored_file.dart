@@ -41,11 +41,11 @@ class StoredFile {
 
     // just write the file if not safe mode or file does not exist
     if (!safeWrite || !f.existsSync()) {
-      return await jsonStorage.saveJson(filePath, what, logVerbose: logVerbose);
+      return await jsonStorage.saveJson(filePath, what, logVerbose: logVerbose, flush: true);
     }
 
     // store new file
-    var ok = await jsonStorage.saveJson(filePath + '.new', what, logVerbose: logVerbose);
+    var ok = await jsonStorage.saveJson(filePath + '.new', what, logVerbose: logVerbose, flush: true);
 
     if (!ok) return false;
 
