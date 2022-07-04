@@ -17,7 +17,7 @@ class SingleFireFunction {
     if (!fired) {
       fired = true;
 
-      WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         await onFire();
         done = true;
       });
