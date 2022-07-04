@@ -53,6 +53,25 @@ class RequestResponse {
 
   /// request body
   String requestBody = '';
+
+  /// is this response a json
+  bool isJson = false;
+
+  /// is this response plain (text or json)
+  bool isPlain = false;
+
+  /// is this response a text response
+  bool get isText => isJson || isPlain;
+
+  void parseContentType(String? header) {
+    var typeHeader = '';
+    if (header != null) typeHeader = header;
+
+    contentType = typeHeader.trim().toLowerCase();
+
+    isJson = contentType.contains('application/json');
+    isPlain = contentType.contains('text/plain');
+  }
 }
 
 class Requests {
@@ -166,22 +185,31 @@ class Requests {
       if (log) print('response > Status code:  ($statusCode), content length: $contentLength');
     }
 
+    String typeHeader = '';
+    String contentType = '';
+
     try {
       if (response != null) {
+        // get content type
+        result.parseContentType(response!.headers['content-type']);
+
         if (response!.reasonPhrase != null) result.reasonPhrase = response!.reasonPhrase!;
 
         if (!multipart) {
           // get response body
           var res = response as http.Response;
 
-          if (res.body.isNotEmpty) {
+          if (res.body.isNotEmpty && result.isText) {
             responseBody = utf8.decode(res.bodyBytes);
           }
         } else {
           result.streamed = true;
+
           // get streamed response body
-          var r = await http.Response.fromStream(response as http.StreamedResponse);
-          responseBody = utf8.decode(r.bodyBytes);
+          if (result.isText) {
+            var r = await http.Response.fromStream(response as http.StreamedResponse);
+            responseBody = utf8.decode(r.bodyBytes);
+          }
         }
       }
 
@@ -192,29 +220,17 @@ class Requests {
       print(e);
     }
 
-    String typeHeader = '';
-
-    if (response != null) {
-      var header = response!.headers['content-type'];
-      if (header != null) typeHeader = header;
-    }
-
-    var contentType = typeHeader.toLowerCase();
-    result.contentType = contentType;
-
     if (response != null && responseBody.isNotEmpty) {
       if (log) print('response > content-type: $contentType');
 
-      var isJson = contentType.contains('application/json');
-
       // log only text body
-      if (log && (isJson || contentType.contains('text'))) {
+      if (log && result.isText) {
         print('response > body: $responseBody');
       }
 
       if (log) print('response > headers: ${response!.headers}');
 
-      if (isJson) {
+      if (result.isJson) {
         try {
           if (!isJsonArray) {
             result.jsonResponse = json.decode(responseBody);
