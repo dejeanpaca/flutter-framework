@@ -16,7 +16,7 @@ Future<void> showProgressDialog(BuildContext context, Future future,
 }
 
 class ProgressDialog extends StatefulWidget {
-  static const String defaultMessage = 'Please wait ...';
+  static String defaultMessage = 'Please wait ...';
 
   @required
   final Future future;
