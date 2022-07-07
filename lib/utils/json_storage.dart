@@ -15,9 +15,13 @@ Future<Map<String, dynamic>?> loadJson(String fileName, {bool logVerbose = false
   try {
     var s = await file.readAsString();
 
-    result = json.decode(s);
+    if (s.isNotEmpty) {
+      result = json.decode(s);
 
-    if (logVerbose) print('load > json: ' + fileName);
+      if (logVerbose) print('load > json: ' + fileName);
+    } else {
+      if (logVerbose) print('load > json empty: ' + fileName);
+    }
   } catch (e) {
     result = null;
     if (logVerbose) print('load > failed: ' + fileName);
