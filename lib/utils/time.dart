@@ -129,6 +129,35 @@ extension TimeDateUtils on DateTime {
   static int daysInMonth(int month, {int year = 2022}) {
     return DateTime(year, month + 1, 0).day;
   }
+
+  /// check if a year is a leap year
+  static bool isLeapYear(int year) {
+    return (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
+  }
+
+  /// get total days in this month
+  static int daysInYear(int year) {
+    return !isLeapYear(year) ? 365 : 366;
+  }
+
+  /// Calculates number of weeks for a given year as per https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year
+  int numOfWeeks(int year) {
+    DateTime dec28 = DateTime(year, 12, 28);
+    int dayOfDec28 = int.parse(DateFormat("D").format(dec28));
+    return ((dayOfDec28 - dec28.weekday + 10) / 7).floor();
+  }
+
+  /// Calculates week number from a date as per https://en.wikipedia.org/wiki/ISO_week_date#Calculation
+  int weekNumber(DateTime date) {
+    int dayOfYear = int.parse(DateFormat("D").format(date));
+    int woy = ((dayOfYear - date.weekday + 10) / 7).floor();
+    if (woy < 1) {
+      woy = numOfWeeks(date.year - 1);
+    } else if (woy > numOfWeeks(date.year)) {
+      woy = 1;
+    }
+    return woy;
+  }
 }
 
 /// some helpful nullable DateTime extensions
