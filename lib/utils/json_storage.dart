@@ -32,23 +32,35 @@ Future<Map<String, dynamic>?> loadJson(String fileName, {bool logVerbose = false
 }
 
 Future<bool> saveJson<T>(String fileName, T what, {bool logVerbose = false, bool flush = true}) async {
-  File file = new File(fileName);
-
-  bool result;
+  bool result = false;
+  String contents = '';
 
   try {
-    var contents = json.encode(what);
-
-    file.writeAsString(contents, flush: flush);
-
-    if (logVerbose) print('save > json: ' + fileName + ' as ' + T.toString());
-    result = true;
+    contents = json.encode(what);
   } catch (e, s) {
-    if (logVerbose) print('save > failed: ' + fileName);
+    if (logVerbose) print('save > failed to encode: ' + fileName);
     print(e.toString());
     debugPrintStack(stackTrace: s);
 
-    result = false;
+    return false;
+  }
+
+  File file = new File(fileName);
+
+  if (contents.isNotEmpty) {
+    try {
+      file.writeAsString(contents, flush: flush);
+
+      if (logVerbose) print('save > json: ' + fileName + ' as ' + T.toString());
+
+      result = true;
+    } catch (e, s) {
+      if (logVerbose) print('save > failed: ' + fileName);
+      print(e.toString());
+      debugPrintStack(stackTrace: s);
+
+      result = false;
+    }
   }
 
   return result;
