@@ -287,4 +287,24 @@ class Requests {
       return false;
     }
   }
+
+  static String formEndpoint(String baseUrl, String route) {
+    // remove unnecessary trailing slash
+    if (baseUrl.isNotEmpty && baseUrl[baseUrl.length - 1] == '/') {
+      baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+    }
+
+    route = cleanupRoute(route);
+    
+    return '$baseUrl/$route';
+  }
+
+  static String cleanupRoute(String route) {
+    // remove unnecessary leading slash
+    if (route.isNotEmpty && route[0] == '/') {
+      return route.substring(1, route.length);
+    }
+
+    return route;
+  }
 }
