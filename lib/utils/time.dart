@@ -130,6 +130,12 @@ extension TimeDateUtils on DateTime {
     return DateTime(year, month + 1, 0).day;
   }
 
+  /// get total days in this month
+  static DateTime lastDateInMonth(int month, {int year = 2022}) {
+    return DateTime(year, month, daysInMonth(month, year: year));
+  }
+
+
   /// check if a year is a leap year
   static bool isLeapYear(int year) {
     return (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
