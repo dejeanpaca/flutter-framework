@@ -45,7 +45,8 @@ extension TimeDateUtils on DateTime {
 
   /// find the first day of the week this day is part of
   DateTime firstDateOfTheWeek() {
-    return this.subtract(Duration(days: this.weekday - 1));
+    var date = this.subtract(Duration(days: this.weekday - 1));
+    return DateTime(date.year, date.month, date.day);
   }
 
   /// find the last date of the week this day is part of
