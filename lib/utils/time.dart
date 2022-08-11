@@ -50,8 +50,9 @@ extension TimeDateUtils on DateTime {
   }
 
   /// find the last date of the week this day is part of
-  DateTime lastDateOfTheWeek(DateTime dateTime) {
-    return dateTime.add(Duration(days: DateTime.daysPerWeek - dateTime.weekday));
+  DateTime lastDateOfTheWeek() {
+    var date = this.add(Duration(days: DateTime.daysPerWeek - this.weekday));
+    return DateTime(date.year, date.month, date.day);
   }
 
   /// return same time that occurs on the given day
