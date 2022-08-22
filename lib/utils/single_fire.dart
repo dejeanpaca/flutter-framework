@@ -7,7 +7,12 @@ class SingleFireFunction {
   bool done = false;
   int instance = 0;
 
-  void fire(Future<void> Function() onFire) {
+  void fire(Future<void> Function() onFire, {bool refire = false}) {
+    if (refire) {
+      fired = false;
+      done = false;
+    }
+
     if (appInstance != instance) {
       instance = appInstance;
       fired = false;
@@ -22,11 +27,5 @@ class SingleFireFunction {
         done = true;
       });
     }
-  }
-
-  void fireAgain(Future<void> Function() onFire) {
-    fired = false;
-    done = false;
-    fire(onFire);
   }
 }
