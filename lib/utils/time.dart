@@ -166,6 +166,18 @@ extension TimeDateUtils on DateTime {
     }
     return woy;
   }
+
+  double elapsed() {
+    var end = DateTime.now();
+    var diff = end.difference(this);
+    return diff.elapsed();
+  }
+
+  int elapsedInMiliseconds() {
+    var end = DateTime.now();
+    var diff = end.difference(this);
+    return diff.inMilliseconds;
+  }
 }
 
 /// some helpful nullable DateTime extensions
