@@ -29,8 +29,13 @@ class ProgressDialog extends StatefulWidget {
   final ShapeBorder? shape;
   final EdgeInsets insetPadding;
 
-  ProgressDialog(this.future, {this.message, this.content, this.shape, this.insetPadding = const EdgeInsets.symmetric(
-      horizontal: 40.0, vertical: 24.0)});
+  const ProgressDialog(this.future, {
+    Key? key,
+    this.message,
+    this.content,
+    this.shape,
+    this.insetPadding = const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => ProgressDialogState();
@@ -46,8 +51,9 @@ class ProgressDialogState extends State<ProgressDialog> {
 
       widget.future.then((value) {
         Navigator.pop(context);
-      }).catchError((o, stackTrace) {
-        print('Error during progress ${0.toString()} dialog:\n' + stackTrace.toString());
+      }).catchError((err, stackTrace) {
+        debugPrint('Error during progress ${err.toString()} dialog');
+        debugPrintStack(stackTrace: stackTrace);
         Navigator.pop(context);
       });
     }
@@ -63,7 +69,7 @@ class ProgressDialogState extends State<ProgressDialog> {
   }
 
   Widget buildDialog(BuildContext context) {
-    var shape = widget.shape != null ? widget.shape : RoundedRectangleBorder(borderRadius: BorderRadius.circular(10));
+    var shape = widget.shape ?? RoundedRectangleBorder(borderRadius: BorderRadius.circular(10));
 
     Widget content = widget.content != null
         ? widget.content!
@@ -72,12 +78,14 @@ class ProgressDialogState extends State<ProgressDialog> {
       child: Padding(
           padding: const EdgeInsets.all(25.0),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
-            CircularProgressIndicator(),
-            const Padding(padding: const EdgeInsets.only(right: 10.0),),
+            const CircularProgressIndicator(),
+            const Padding(
+              padding: EdgeInsets.only(right: 10.0),
+            ),
             if (widget.message != null) Expanded(child: Text(widget.message!)),
           ])),
     );
 
-    return Dialog(child: content, shape: shape, insetPadding: widget.insetPadding);
+    return Dialog(shape: shape, insetPadding: widget.insetPadding, child: content);
   }
 }
