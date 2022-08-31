@@ -45,9 +45,9 @@ class JsonUtils {
 
     if (value is String) {
       var v = double.tryParse(value);
-      return v != null ? v : defaultValue;
+      return v ?? defaultValue;
     } else if (value is int) {
-      var v = value.toDouble();
+      return value.toDouble();
     } else if (value is double) {
       return value;
     }
@@ -92,9 +92,13 @@ class JsonUtils {
     if (value == null) return defaultValue;
 
     if (value is String) {
-      if (value == 'true')
+      if (value == 'true') {
         return true;
-      else if (value == 'false') return false;
+      }
+
+      return false;
+    } else if (value is int) {
+      return value != 0;
     } else if (value is bool) {
       return value;
     }
@@ -103,37 +107,39 @@ class JsonUtils {
   }
 
   static String colorToString(Color color) {
-    return '#' + color.value.toRadixString(16);
+    return '#${color.value.toRadixString(16)}';
   }
 
   /// convert string to color
   static Color colorFromString(dynamic color, Color defaultValue) {
-    if (color == null || !(color is String)) return defaultValue;
+    if (color == null || color! is! String) return defaultValue;
 
     color = color.replaceAll('#', '');
 
-    if (color.length == 6)
-      color = "0xFF" + color;
-    else if (color.length == 8)
-      color = "0x" + color;
-    else
+    if (color.length == 6) {
+      color = '0xFF$color';
+    } else if (color.length == 8) {
+      color = '0x$color';
+    } else {
       return defaultValue;
+    }
 
     return Color(getInt(color, 0));
   }
 
   /// convert string to color
   static Color? colorFromStringNullable(dynamic color, Color? defaultValue) {
-    if (color == null || !(color is String)) return defaultValue;
+    if (color == null || color is! String) return defaultValue;
 
     color = color.replaceAll('#', '');
 
-    if (color.length == 6)
-      color = "0xFF" + color;
-    else if (color.length == 8)
-      color = "0x" + color;
-    else
+    if (color.length == 6) {
+      color = '0xFF$color';
+    } else if (color.length == 8) {
+      color = '0x$color';
+    } else {
       return defaultValue;
+    }
 
     return Color(getInt(color, 0));
   }
