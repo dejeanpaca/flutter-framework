@@ -106,6 +106,25 @@ class JsonUtils {
     return defaultValue;
   }
 
+  /// get bool nullable from a string/bool, or return given default if value is not a valid bool (no exception is raised)
+  static bool? getBoolNullable(dynamic value, bool? defaultValue) {
+    if (value == null) return null;
+
+    if (value is String) {
+      if (value == 'true') {
+        return true;
+      }
+
+      return false;
+    } else if (value is int) {
+      return value != 0;
+    } else if (value is bool) {
+      return value;
+    }
+
+    return defaultValue;
+  }
+
   static String colorToString(Color color) {
     return '#${color.value.toRadixString(16)}';
   }
