@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+/// Helps to refresh state periodically
+/// Instance it, run() it with a setState, and call .dispose() on dispose
 class StateRefresher {
   Timer? timer;
 
@@ -13,6 +15,7 @@ class StateRefresher {
     });
   }
 
+  /// should be called on page/widget dispose()
   void dispose() {
     timer?.cancel();
   }
