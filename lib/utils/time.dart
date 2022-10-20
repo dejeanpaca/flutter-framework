@@ -86,7 +86,7 @@ extension TimeDateUtils on DateTime {
   }
 
   /// get number representation as four digits
-  static String _fourDigits(int n) {
+  static String fourDigits(int n) {
     int absN = n.abs();
     String sign = n < 0 ? '-' : '';
 
@@ -98,7 +98,7 @@ extension TimeDateUtils on DateTime {
   }
 
   /// get number representation as six digits
-  static String _sixDigits(int n) {
+  static String sixDigits(int n) {
     assert(n < -9999 || n > 9999);
     int absN = n.abs();
     String sign = n < 0 ? '-' : '+';
@@ -107,18 +107,18 @@ extension TimeDateUtils on DateTime {
   }
 
   /// get number representation as two digits
-  static String _twoDigits(int n) {
+  static String twoDigits(int n) {
     return n >= 10 ? '$n' : '0$n';
   }
 
   /// Creates a more compact iso 8601 string without mili and microseconds.
   String toCompactIso8601String() {
-    String y = (year >= -9999 && year <= 9999) ? _fourDigits(year) : _sixDigits(year);
-    String m = _twoDigits(month);
-    String d = _twoDigits(day);
-    String h = _twoDigits(hour);
-    String min = _twoDigits(minute);
-    String sec = _twoDigits(second);
+    String y = (year >= -9999 && year <= 9999) ? fourDigits(year) : sixDigits(year);
+    String m = twoDigits(month);
+    String d = twoDigits(day);
+    String h = twoDigits(hour);
+    String min = twoDigits(minute);
+    String sec = twoDigits(second);
 
     if (isUtc)
       return '$y-$m-${d}T$h:$min:${sec}Z';
