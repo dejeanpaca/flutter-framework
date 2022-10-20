@@ -108,8 +108,7 @@ extension TimeDateUtils on DateTime {
 
   /// get number representation as two digits
   static String _twoDigits(int n) {
-    if (n >= 10) return '${n}';
-    return '0${n}';
+    return n >= 10 ? '$n' : '0$n';
   }
 
   /// Creates a more compact iso 8601 string without mili and microseconds.
