@@ -147,6 +147,10 @@ extension TimeDateUtils on DateTime {
     return !isLeapYear(year) ? 365 : 366;
   }
 
+  static int daysInYearSoFar(DateTime day) {
+    return day.difference(DateTime(day.year, 1, 1)).inDays;
+  }
+
   /// Calculates number of weeks for a given year as per https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year
   int numOfWeeks(int year) {
     DateTime dec28 = DateTime(year, 12, 28);
