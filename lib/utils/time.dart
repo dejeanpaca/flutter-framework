@@ -17,8 +17,16 @@ extension TimeDateUtils on DateTime {
     return this.year == other.year;
   }
 
+  /// is the given date a day before this one
   bool isYesterday(DateTime today) {
-    return this.year == today.year && this.month == today.month && this.day == today.day - 1;
+    var yesterday = DateTime(this.year, this.month, this.day - 1);
+    return yesterday.year == today.year && yesterday.month == today.month && yesterday.day == today.day;
+  }
+
+  /// is the given date a day after this one
+  bool isTomorrow(DateTime today) {
+    var tomorrow = DateTime(this.year, this.month, this.day + 1);
+    return tomorrow.year == today.year && tomorrow.month == today.month && tomorrow.day == today.day;
   }
 
   /// is the given month after this one
@@ -36,6 +44,13 @@ extension TimeDateUtils on DateTime {
     return this.year > other.year ||
         (this.year >= other.year && this.month > other.month) ||
         (this.year >= other.year && this.month >= other.month && this.day > other.day);
+  }
+
+  /// is this day before a given other
+  bool isDayBefore(DateTime other) {
+    return this.year < other.year ||
+        (this.year <= other.year && this.month < other.month) ||
+        (this.year <= other.year && this.month >= other.month && this.day < other.day);
   }
 
   /// is this day after a given other
@@ -58,25 +73,19 @@ extension TimeDateUtils on DateTime {
   /// return same time that occurs on the given day
   DateTime getOnDay(DateTime today) {
     return DateTime(
-      today.year,
-      today.month,
-      today.day,
-      this.hour,
-      this.minute,
-      this.second,
-      this.millisecond,
+        today.year,
+        today.month,
+        today.day,
+        this.hour,
+        this.minute,
+        this.second,
+        this.millisecond
     );
   }
 
   /// return same date that occurs with the given time of day
   DateTime withTimeOfDay(TimeOfDay time) {
-    return DateTime(
-      this.year,
-      this.month,
-      this.day,
-      time.hour,
-      time.minute,
-    );
+    return DateTime(this.year, this.month, this.day, time.hour, time.minute);
   }
 
 
@@ -148,17 +157,21 @@ extension TimeDateUtils on DateTime {
   }
 
   static int daysInYearSoFar(DateTime day) {
-    return day.difference(DateTime(day.year, 1, 1)).inDays;
+    return day
+        .difference(DateTime(day.year, 1, 1))
+        .inDays;
   }
 
-  /// Calculates number of weeks for a given year as per https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year
+  /// Calculates number of weeks for a given year as per
+  /// https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year
   int numOfWeeks(int year) {
     DateTime dec28 = DateTime(year, 12, 28);
     int dayOfDec28 = int.parse(DateFormat("D").format(dec28));
     return ((dayOfDec28 - dec28.weekday + 10) / 7).floor();
   }
 
-  /// Calculates week number from a date as per https://en.wikipedia.org/wiki/ISO_week_date#Calculation
+  /// Calculates week number from a date as per
+  /// https://en.wikipedia.org/wiki/ISO_week_date#Calculation
   int weekNumber(DateTime date) {
     int dayOfYear = int.parse(DateFormat("D").format(date));
     int woy = ((dayOfYear - date.weekday + 10) / 7).floor();
