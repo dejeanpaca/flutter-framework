@@ -60,8 +60,11 @@ class RequestResponse {
   /// is this response plain (text or json)
   bool isPlain = false;
 
+  /// is this an xml response
+  bool isXml = false;
+
   /// is this response a text response
-  bool get isText => isJson || isPlain;
+  bool get isText => isJson || isPlain || isXml;
 
   void parseContentType(String? header) {
     var typeHeader = '';
@@ -71,6 +74,7 @@ class RequestResponse {
 
     isJson = contentType.contains('application/json');
     isPlain = contentType.contains('text/plain');
+    isXml = contentType.contains('text/xml');
   }
 }
 
@@ -295,7 +299,7 @@ class Requests {
     }
 
     route = cleanupRoute(route);
-    
+
     return '$baseUrl/$route';
   }
 
