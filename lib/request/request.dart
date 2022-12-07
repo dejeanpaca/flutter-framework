@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:framework/utils/time.dart';
 
 enum RequestMethod {
   POST,
@@ -32,6 +33,9 @@ class RequestResponse {
 
   /// response data as json
   Map<String, dynamic>? jsonResponse;
+
+  /// response data as string (utf-8)
+  String stringResponse = '';
 
   /// response data as json
   List<dynamic>? jsonArray;
@@ -95,6 +99,10 @@ class Requests {
         bool isJsonArray = false,
         Duration? timeout,
       }) async {
+    DateTime? start;
+
+    if (log) start = DateTime.now();
+
     var uri = Uri.parse(url);
     var result = RequestResponse();
 
@@ -205,6 +213,7 @@ class Requests {
 
           if (res.body.isNotEmpty && result.isText) {
             responseBody = utf8.decode(res.bodyBytes);
+            result.stringResponse = responseBody;
           }
         } else {
           result.streamed = true;
@@ -213,6 +222,7 @@ class Requests {
           if (result.isText) {
             var r = await http.Response.fromStream(response as http.StreamedResponse);
             responseBody = utf8.decode(r.bodyBytes);
+            result.stringResponse = responseBody;
           }
         }
       }
@@ -253,7 +263,7 @@ class Requests {
       validateResponse(result, expectedContentTypes);
     }
 
-    if (log) print('req > done ($reqOk): $url');
+    if (log) print('req > done (ok: $reqOk, elapsed: ${start!.elapsed().toStringAsFixed(3)}s): $url');
 
     result.response = response;
     return result;
