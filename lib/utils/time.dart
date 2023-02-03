@@ -183,6 +183,7 @@ extension TimeDateUtils on DateTime {
     return woy;
   }
 
+  /// return elapsed time in seconds
   double elapsed() {
     var end = DateTime.now();
     var diff = end.difference(this);

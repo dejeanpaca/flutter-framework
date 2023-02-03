@@ -17,8 +17,8 @@ String getMonthlyTimeRepresentation(DateTime day, DateTime today, {bool useForma
   var localizedFormat = DateFormat(format).format(day);
   if (useFormat) caption = caption + ' ($localizedFormat)';
 
-  if (!day.isSameDay(today)) {
-    if (day.isYesterday(today)) {
+  if (!today.isSameDay(day)) {
+    if (today.isYesterday(day)) {
       if (!useFormat)
         caption = 'Yesterday';
       else
