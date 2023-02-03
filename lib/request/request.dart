@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:framework/utils/time.dart';
 
@@ -160,8 +161,8 @@ class Requests {
         if (response != null) req = response!.request;
       }
     } catch (e, s) {
-      print('req > exception\n$e');
-      print(s);
+      print('req > exception: $e');
+      debugPrintStack(stackTrace: s, label: 'req > stacktrace');
 
       if (e is SocketException) {
         if (e.osError != null) result.ioError = e.osError;
