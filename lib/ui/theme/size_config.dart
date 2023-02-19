@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter/foundation.dart';
 
 /// A helpful way to handle sizes in flutter according to:
 /// https://medium.com/flutter-community/flutter-effectively-scale-ui-according-to-different-screen-sizes-2cb7c115ea0a
@@ -33,8 +34,10 @@ class SizeConfig {
     safeBlockHorizontal = (screenWidth - safeAreaHorizontal) / blockSize;
     safeBlockVertical = (screenHeight - safeAreaVertical) / blockSize;
 
-    print('Screen aspect ratio: $aspectRatio');
-    print('Screen size: ${screenWidth}x$screenHeight');
-    print('Safe area: ${safeAreaHorizontal}x$safeBlockVertical');
+    if (kDebugMode) {
+      print('Screen aspect ratio: $aspectRatio');
+      print('Screen size: ${screenWidth}x$screenHeight');
+      print('Safe area: ${safeBlockHorizontal}x$safeBlockVertical');
+    }
   }
 }
