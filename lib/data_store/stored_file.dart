@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 import 'package:framework/utils/json_storage.dart' as jsonStorage;
 import 'package:framework/utils/storage.dart';
@@ -8,9 +9,6 @@ import 'data_store.dart';
 class StoredFile {
   /// log verbose
   static bool logVerbose = false;
-
-  /// write files in a safe way
-  static bool safeWrite = true;
 
   /// name for this file (not the path)
   String fileName = 'file.json';
@@ -37,62 +35,8 @@ class StoredFile {
   Future<bool> saveFile<T>(T what) async {
     var filePath = getPath();
 
-    var f = File(filePath);
-
-    // just write the file if not safe mode or file does not exist
-    if (!safeWrite || !(await f.exists())) {
-      return await jsonStorage.saveJson(filePath, what, logVerbose: logVerbose);
-    }
-
-    // store new file
-    var ok = await jsonStorage.saveJson(filePath + '.new', what, logVerbose: logVerbose);
-
-    if (!ok) return false;
-
-    // remove old file, if one is present
-    var existingOldF = File(filePath + '.old');
-
-    try {
-      // NOTE does not matter what existsSync() say, it might throw an exception when we call deleteSync
-      if (await existingOldF.exists()) await existingOldF.delete();
-    } catch (e, s) {}
-
-    // rename current file to old file, if one is present
-    var oldF = File(filePath);
-
-    if (await oldF.exists()) {
-      File? f;
-
-      try {
-        await oldF.rename(filePath + '.old');
-        ok = true;
-      } catch (e) {
-        print('Failed to rename old file: $filePath to $filePath.old');
-        print(e);
-        return false;
-      };
-    }
-
-    // rename new file to current file
-    var newF = File(filePath + '.new');
-
-    try {
-      await newF.rename(filePath);
-      ok = true;
-    } catch (e) {
-      print('Failed to rename new file: $filePath.new to $filePath');
-      print(e);
-      return false;
-    }
-
-    // remove old file
-    try {
-      oldF = File(filePath + '.old');
-      await oldF.delete();
-    } catch (e) {
-      print('Failed to delete old file: $oldF.path');
-      print(e);
-    }
+    // just write the file
+    var ok = await jsonStorage.saveJson(filePath, what, logVerbose: logVerbose);
 
     return ok;
   }
@@ -107,6 +51,12 @@ class StoredFile {
     var json = await jsonStorage.loadJson(getPath(), logVerbose: logVerbose);
 
     if (json != null) await onLoad(json);
+  }
+
+  /// delete the stored file managed by this handler
+  Future<bool> exists() async {
+    var f = File(getPath());
+    return await f.exists();
   }
 
   /// delete the stored file managed by this handler
