@@ -40,7 +40,7 @@ class StoredFile {
     var f = File(filePath);
 
     // just write the file if not safe mode or file does not exist
-    if (!safeWrite || !f.existsSync()) {
+    if (!safeWrite || !(await f.exists())) {
       return await jsonStorage.saveJson(filePath, what, logVerbose: logVerbose);
     }
 
@@ -52,14 +52,15 @@ class StoredFile {
     // remove old file, if one is present
     var existingOldF = File(filePath + '.old');
 
-    if (existingOldF.existsSync()) {
-      existingOldF.deleteSync();
-    }
+    try {
+      // NOTE does not matter what existsSync() say, it might throw an exception when we call deleteSync
+      if (await existingOldF.exists()) await existingOldF.delete();
+    } catch (e, s) {}
 
     // rename current file to old file, if one is present
     var oldF = File(filePath);
 
-    if (await oldF.existsSync()) {
+    if (await oldF.exists()) {
       File? f;
 
       try {
