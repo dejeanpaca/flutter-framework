@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'dart:async';
 
 class SingleFireFunction {
   static int appInstance = 0;
@@ -22,7 +22,7 @@ class SingleFireFunction {
     if (!fired) {
       fired = true;
 
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Timer.run(() async {
         await onFire();
         done = true;
       });
