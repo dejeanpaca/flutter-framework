@@ -60,7 +60,7 @@ class StoredFile {
   }
 
   /// delete the stored file managed by this handler
-  Future<bool> deleteFile() async {
+  Future<bool> delete() async {
     // delete file
     var f = File(getPath());
 
@@ -86,7 +86,7 @@ class StoredDataFile extends StoredFile {
   }
 
   @override
-  Future<bool> deleteFile() async {
+  Future<bool> delete() async {
     if (await DataStore.pathExists()) {
       return await super.deleteFile();
     }
