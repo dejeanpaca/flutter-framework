@@ -88,7 +88,7 @@ class StoredDataFile extends StoredFile {
   @override
   Future<bool> delete() async {
     if (await DataStore.pathExists()) {
-      return await super.deleteFile();
+      return await super.delete();
     }
 
     return true;
