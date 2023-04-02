@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 Future<Map<String, dynamic>?> loadJson(String fileName, {bool logVerbose = false}) async {
-  File file = new File(fileName);
+  File file = File(fileName);
 
   Map<String, dynamic>? result;
 
@@ -45,11 +45,11 @@ Future<bool> saveJson<T>(String fileName, T what, {bool logVerbose = false, bool
     return false;
   }
 
-  File file = new File(fileName);
+  File file = File(fileName);
 
   if (contents.isNotEmpty) {
     try {
-      file.writeAsString(contents, flush: flush);
+      await file.writeAsString(contents, flush: flush);
 
       if (logVerbose) print('save > json: ' + fileName + ' as ' + T.toString());
 
