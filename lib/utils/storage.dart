@@ -39,7 +39,7 @@ Future<bool> saveFileAsString(String fileName, String contents) async {
   bool result;
 
   try {
-    file.writeAsString(contents, flush: true);
+    await file.writeAsString(contents, flush: true);
 
     result = true;
   } catch (e) {
@@ -57,7 +57,7 @@ Future<bool> saveFileAsBytes(String fileName, Uint8List bytes) async {
   bool result;
 
   try {
-    file.writeAsBytes(bytes, flush: true);
+    await file.writeAsBytes(bytes, flush: true);
 
     result = true;
   } catch (e) {
