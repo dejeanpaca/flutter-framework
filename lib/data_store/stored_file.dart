@@ -24,7 +24,7 @@ class StoredFile {
   Map<String, dynamic> toJson() => {};
 
   /// read json
-  loadJson(Map<String, dynamic> jsn) {}
+  void loadJson(Map<String, dynamic> jsn) {}
 
   /// save this file
   Future<bool> save() async {
