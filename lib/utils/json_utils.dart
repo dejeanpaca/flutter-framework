@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class JsonUtils {
@@ -174,5 +175,27 @@ class JsonUtils {
     }
 
     return time;
+  }
+
+  static List<int> getInts(dynamic jsn) {
+    if (jsn != null && jsn is Iterable<dynamic>) {
+      return List<int>.from(jsn as Iterable<dynamic>);
+    }
+
+    return [];
+  }
+
+  static List<String> getStrings(dynamic jsn) {
+    var strings = getStringsNullable(jsn);
+
+    return strings != null ? strings : [];
+  }
+
+  static List<String>? getStringsNullable(dynamic jsn) {
+    if (jsn != null && jsn is Iterable<dynamic>) {
+      return List<String>.from(jsn as Iterable<dynamic>);
+    }
+
+    return null;
   }
 }
