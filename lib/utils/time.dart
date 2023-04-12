@@ -195,6 +195,38 @@ extension TimeDateUtils on DateTime {
     var diff = end.difference(this);
     return diff.inMilliseconds;
   }
+
+  DateTime clone({
+    int? year = null,
+    int? month = null,
+    int? day = null,
+    int? hour = null,
+    int? minute = null,
+    int? second = null,
+    int? millisecond = null,
+    bool? isUtc = null,
+  }) {
+    if (isUtc == null ? this.isUtc : isUtc) {
+      return DateTime.utc(
+        year == null ? this.year : year,
+        month == null ? this.month : month,
+        day == null ? this.day : day,
+        hour == null ? this.hour : hour,
+        minute == null ? this.minute : minute,
+        second == null ? this.second : second,
+        millisecond == null ? this.millisecond : millisecond,
+      );
+    }
+    return DateTime(
+      year == null ? this.year : year,
+      month == null ? this.month : month,
+      day == null ? this.day : day,
+      hour == null ? this.hour : hour,
+      minute == null ? this.minute : minute,
+      second == null ? this.second : second,
+      millisecond == null ? this.millisecond : millisecond,
+    );
+  }
 }
 
 /// some helpful nullable DateTime extensions
