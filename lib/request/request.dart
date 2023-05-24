@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 import 'package:framework/utils/time.dart';
+import 'package:http/http.dart' as http;
 
 enum RequestMethod {
   POST,
@@ -97,6 +97,7 @@ class Requests {
         List<http.MultipartFile>? files,
         Map<String, String>? fields,
         List<String>? expectedContentTypes,
+        String? acceptType,
         bool isJsonArray = false,
         Duration? timeout,
       }) async {
@@ -117,6 +118,11 @@ class Requests {
 
     var timeoutDuration = timeout ?? Requests.timeoutDuration;
 
+    Map<String, String>? useHeaders = {};
+
+    if (headers != null) useHeaders.addAll(headers);
+    if (acceptType != null) useHeaders.addAll({'Accept': acceptType!});
+
     try {
       if (multipart) {
         // log all sent files
@@ -131,7 +137,7 @@ class Requests {
         var multipartReq = http.MultipartRequest(method.name, uri);
         req = multipartReq;
 
-        if (headers != null) multipartReq.headers.addAll(headers);
+        if (useHeaders != null && useHeaders.isNotEmpty) multipartReq.headers.addAll(useHeaders);
         if (files != null) multipartReq.files.addAll(files);
         if (fields != null) multipartReq.fields.addAll(fields);
 
@@ -140,15 +146,15 @@ class Requests {
         late Future<http.Response> future;
 
         if (method == RequestMethod.GET) {
-          future = http.get(uri, headers: headers).timeout(timeoutDuration);
+          future = http.get(uri, headers: useHeaders).timeout(timeoutDuration);
         } else if (method == RequestMethod.POST) {
-          future = http.post(uri, body: body, headers: headers).timeout(timeoutDuration);
+          future = http.post(uri, body: body, headers: useHeaders).timeout(timeoutDuration);
         } else if (method == RequestMethod.PUT) {
-          future = http.put(uri, headers: headers).timeout(timeoutDuration);
+          future = http.put(uri, headers: useHeaders).timeout(timeoutDuration);
         } else if (method == RequestMethod.PATCH) {
-          future = http.patch(uri, headers: headers).timeout(timeoutDuration);
+          future = http.patch(uri, headers: useHeaders).timeout(timeoutDuration);
         } else if (method == RequestMethod.DELETE) {
-          future = http.delete(uri, headers: headers).timeout(timeoutDuration);
+          future = http.delete(uri, headers: useHeaders).timeout(timeoutDuration);
         }
 
         future.then((value) {
@@ -176,7 +182,7 @@ class Requests {
       if (req != null) {
         print('req > headers: ${req.headers}');
       } else {
-        print('req > headers: $headers');
+        print('req > headers: $useHeaders');
       }
     }
 
@@ -186,20 +192,29 @@ class Requests {
     if (contentLength != null) result.contentLength = contentLength;
 
     var reqOk = false;
+    String errorContentType = '';
+
+    if (response != null) {
+      // get content type
+      result.parseContentType(response!.headers['content-type']);
+    }
+
+    if (result.contentType.isNotEmpty) {
+      errorContentType = ' content type: ${result.contentType},';
+    }
 
     if (statusCode < 200 || statusCode >= 400 || response == null) {
       if (response == null) {
         print('response > No response (timeout)');
       } else {
-        print('response > Error. Status code:  ($statusCode), content length: $contentLength');
+        print(
+            'response > Error. Status code:  ($statusCode),$errorContentType content length: $contentLength');
       }
     } else {
       reqOk = true;
-      if (log) print('response > Status code:  ($statusCode), content length: $contentLength');
+      if (log) print(
+          'response > Status code:  ($statusCode),$errorContentType content length: $contentLength');
     }
-
-    String typeHeader = '';
-    String contentType = '';
 
     try {
       if (response != null) {
@@ -236,7 +251,7 @@ class Requests {
     }
 
     if (response != null && responseBody.isNotEmpty) {
-      if (log) print('response > content-type: $contentType');
+      if (log) print('response > content-type: ${result.contentType}');
 
       // log only text body
       if (log && result.isText) {
