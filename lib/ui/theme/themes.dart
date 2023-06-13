@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'app_theme.dart';
@@ -10,18 +11,18 @@ class Themes {
 
   static String themePreference = 'system';
 
+  /// last used theme for system mode (we need this to determine theme based on Brightness)
+  static String lastSystemTheme = 'light';
+
   static ThemeMode mode = ThemeMode.system;
 
   /// current app theme
   static AppTheme current = AppTheme(theme: ThemeData());
 
-  /// current flutter theme
-  static ThemeData theme = new ThemeData();
-
   /// is the current theme dark
   static bool isDark = false;
 
-  /// list of themes used with theme indexes [light, dark]
+  /// list of themes used with system theme indexes [light, dark]
   static List<AppTheme?> systemThemes = [null, null];
 
   /// list of themes used with theme indexes [light, dark]
@@ -58,10 +59,15 @@ class Themes {
   static int getAppThemeIndex({Brightness? brightness}) {
     if (themePreference == 'system') {
       if (brightness != null) {
-        if (brightness == Brightness.light)
+        if (brightness == Brightness.light) {
+          if (kDebugMode) print('theme > Last system theme set to: light');
+          lastSystemTheme = 'light';
           return THEME_LIGHT;
-        else if (brightness == Brightness.dark)
+        } else if (brightness == Brightness.dark) {
+          if (kDebugMode) print('theme > Last system theme set to: dark');
+          lastSystemTheme = 'dark';
           return THEME_DARK;
+        }
       }
 
       return THEME_LIGHT;
@@ -78,26 +84,27 @@ class Themes {
 
     if (themePreference == 'system') {
       // return system theme if a list is set
-      if (systemThemes[0] != null)
+      if (systemThemes.length > index && systemThemes[index] != null)
         return systemThemes[index]!;
     }
 
-    return themes[index]!;
+    return themes.length > index ? themes[index]! : current;
   }
 
   /// set theme with the given theme index
   static void setTheme(AppTheme theme) {
     current = theme;
-    Themes.theme = current.theme;
     isDark = (current.isDark);
+    DynamicThemeModeState.theme = current;
 
     print('Theme set: ' + current.name);
   }
 
   /// set theme with the given theme index
   static void setThemeIndex(int themeIndex) {
+    if(themeIndex >= themes.length) return;
+
     current = themes[themeIndex]!;
-    theme = current.theme;
     isDark = (current.isDark);
 
     print('Theme set: ' + current.name);
@@ -111,13 +118,16 @@ class Themes {
 
     var theme = getAppTheme(brightness: brightness);
 
+    if (kDebugMode) print(
+        'theme > Applying from preference: $themePreference, brightness: $brightness, theme: ${theme.name}');
+
     setTheme(theme);
     applyTheme(context, callOnApply: callOnApply);
   }
 
   /// apply current theme
   static void applyTheme(BuildContext context, {bool callOnApply = true}) {
-    DynamicThemeMode.of(context)!.setThemeData(theme);
+    DynamicThemeMode.of(context)!.setThemeData(current);
 
     if (callOnApply) callOnApplyTheme();
   }
@@ -138,11 +148,29 @@ class Themes {
     return THEME_DARK;
   }
 
+  /// toggle between default theme values (system, light, dark)
   static void toggleTheme() {
     if (themePreference == 'system')
       themePreference = 'light';
     else if (themePreference == 'light')
       themePreference = 'dark';
     else if (themePreference == 'dark') themePreference = 'system';
+  }
+
+  /// call before loading your app to set the theme used based on preference
+  static void pickSystem() {
+    if (themePreference == 'system') {
+      if (lastSystemTheme == 'light' && systemThemes.length > 0 && systemThemes[0] != null) {
+        setTheme(systemThemes[0]!);
+      } else if (lastSystemTheme == 'dark' && systemThemes.length > 1 && systemThemes[1] != null) {
+        setTheme(systemThemes[1]!);
+      }
+    } else {
+      if (lastSystemTheme == 'light' && systemThemes.length > 0 && systemThemes[0] != null) {
+        setTheme(systemThemes[0]!);
+      } else if (lastSystemTheme == 'dark' && systemThemes.length > 1 && systemThemes[1] != null) {
+        setTheme(systemThemes[1]!);
+      }
+    }
   }
 }

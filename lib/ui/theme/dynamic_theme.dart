@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'app_theme.dart';
 
-typedef DynamicThemeDataWidgetBuilder = Widget Function(BuildContext context, ThemeData? theme);
+typedef DynamicThemeDataWidgetBuilder = Widget Function(BuildContext context, AppTheme? theme);
 
-typedef ThemeDataBuilder = ThemeData Function(ThemeData? theme);
+typedef ThemeDataBuilder = AppTheme Function(AppTheme? theme);
 
 class DynamicThemeMode extends StatefulWidget {
   const DynamicThemeMode({Key? key, this.data, this.child}) : super(key: key);
@@ -22,7 +23,7 @@ class DynamicThemeMode extends StatefulWidget {
 }
 
 class DynamicThemeModeState extends State<DynamicThemeMode> {
-  ThemeData? theme;
+  static AppTheme? theme;
 
   @override
   void didChangeDependencies() {
@@ -37,7 +38,7 @@ class DynamicThemeModeState extends State<DynamicThemeMode> {
   }
 
   /// Set the theme mode using the provided theme data
-  void setThemeData(ThemeData data) {
+  void setThemeData(AppTheme data) {
     setState(() {
       theme = data;
     });
