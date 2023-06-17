@@ -158,7 +158,7 @@ class Themes {
   }
 
   /// call before loading your app to set the theme used based on preference
-  static void pickSystem() {
+  static void pickPreference() {
     if (themePreference == 'system') {
       if (lastSystemTheme == 'light' && systemThemes.length > 0 && systemThemes[0] != null) {
         setTheme(systemThemes[0]!);
@@ -166,10 +166,10 @@ class Themes {
         setTheme(systemThemes[1]!);
       }
     } else {
-      if (lastSystemTheme == 'light' && systemThemes.length > 0 && systemThemes[0] != null) {
-        setTheme(systemThemes[0]!);
-      } else if (lastSystemTheme == 'dark' && systemThemes.length > 1 && systemThemes[1] != null) {
-        setTheme(systemThemes[1]!);
+      if (themePreference == 'light' && themes.length > 0 && themes[0] != null) {
+        setTheme(themes[0]!);
+      } else if (themePreference == 'dark' && themes.length > 1 && themes[1] != null) {
+        setTheme(themes[1]!);
       }
     }
   }
