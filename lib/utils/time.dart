@@ -53,10 +53,16 @@ extension TimeDateUtils on DateTime {
         (this.year <= other.year && this.month >= other.month && this.day < other.day);
   }
 
-  /// is this day after a given other
+  /// is this day after or on the same day as a given other
   bool isSameDayOrAfter(DateTime other) {
     return this.isDayAfter(other) || this.isSameDay(other);
   }
+
+  /// is this day before or on the same day as a given other
+  bool isSameDayOrBefore(DateTime other) {
+    return this.isDayBefore(other) || this.isSameDay(other);
+  }
+
 
   /// find the first day of the week this day is part of
   DateTime firstDateOfTheWeek() {
