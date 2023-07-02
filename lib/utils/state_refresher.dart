@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 /// Instance it, run() it with a setState, and call .dispose() on dispose
 class StateRefresher {
   Timer? timer;
+  Future<void> Function()? onRun;
 
-  void run(StateSetter setState, {Duration duration = const Duration(seconds: 10)}) {
+  void run(StateSetter setState, {Duration duration = const Duration(seconds: 10), Future<void> Function()? onRun}) {
     if (timer != null) return;
 
-    timer = Timer.periodic(duration, (Timer t) {
+    timer = Timer.periodic(duration, (Timer t) async {
+      if (onRun != null) await onRun();
       setState(() {});
     });
   }
