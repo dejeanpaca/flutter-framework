@@ -17,16 +17,16 @@ extension TimeDateUtils on DateTime {
     return this.year == other.year;
   }
 
-  /// is the given date a day before this one
+  /// is this date a day before the given day
   bool isYesterday(DateTime today) {
-    var yesterday = DateTime(this.year, this.month, this.day - 1);
-    return yesterday.year == today.year && yesterday.month == today.month && yesterday.day == today.day;
+    var yesterday = DateTime(today.year, today.month, today.day - 1);
+    return this.isSameDay(yesterday);
   }
 
-  /// is the given date a day after this one
+  /// is this date one day after the given day
   bool isTomorrow(DateTime today) {
-    var tomorrow = DateTime(this.year, this.month, this.day + 1);
-    return tomorrow.year == today.year && tomorrow.month == today.month && tomorrow.day == today.day;
+    var tomorrow = DateTime(today.year, today.month, today.day + 1);
+    return tomorrow.year == this.year && tomorrow.month == this.month && tomorrow.day == this.day;
   }
 
   /// is the given month after this one
