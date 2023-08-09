@@ -17,6 +17,17 @@ Future<void> showProgressDialog(BuildContext context, Future<dynamic> future,
   );
 }
 
+Future<void> showProgressDialogNavigator(NavigatorState navigator, Future<void> future,
+    {bool dismissible = false, Widget? content, String? message, ShapeBorder? dialogShape}) async {
+  if (navigator.mounted) {
+    return showProgressDialog(navigator.context, future,
+        dismissible: dismissible, content: content, message: message, dialogShape: dialogShape);
+  } else {
+    return future;
+  }
+}
+
+
 class ProgressDialog extends StatefulWidget {
   static String defaultMessage = 'Please wait ...';
 
