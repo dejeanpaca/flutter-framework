@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'misc.dart';
+import 'package:flutter/services.dart';
 
 Future<bool> copyFile(File file, String to) async {
   if (await file.exists()) {
@@ -37,6 +38,18 @@ Future<String> saveStringToFile({required String path, required String content})
     f.writeAsString(content);
   } catch (e, s) {
     printException(e, s);
+  }
+
+  return '';
+}
+
+Future<String> loadAssetFileAsString(String path) async {
+  try {
+    var file = await rootBundle.loadString(path, cache: false);
+
+    return file;
+  } catch (e) {
+    // ignore
   }
 
   return '';
