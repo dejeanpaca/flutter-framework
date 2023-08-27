@@ -26,6 +26,16 @@ class JsonUtils {
     return defaultValue;
   }
 
+  /// get int from a string/int, or return given default if value is not a valid int (no exception is raised),
+  /// but make sure it's clamped to the length of a list (0 .. n - 1)
+  static int getIntForList(dynamic value, int listLength, int defaultValue) {
+    var v = getInt(value, defaultValue);
+
+    if (v < 0 || v >= listLength) v = defaultValue;
+
+    return v;
+  }
+
   /// get int from a string/int, or return given default if value is not a valid int (no exception is raised)
   static int? getIntNullable(dynamic value, int? defaultValue) {
     if (value == null) return defaultValue;
