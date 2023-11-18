@@ -29,7 +29,7 @@ extension TimeDateUtils on DateTime {
     return tomorrow.year == this.year && tomorrow.month == this.month && tomorrow.day == this.day;
   }
 
-  /// is the given month after this one
+  /// is this month after the given one
   bool isMonthAfter(DateTime other) {
     return (this.year > other.year) || (this.year == other.year && this.month > other.month);
   }
