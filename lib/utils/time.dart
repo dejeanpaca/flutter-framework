@@ -141,9 +141,16 @@ extension TimeDateUtils on DateTime {
       return '$y-$m-${d}T$h:$min:$sec';
   }
 
-  /// get total days in this month
+  /// get total days in a given month
   static int daysInMonth(int month, {int year = 2022}) {
     return DateTime(year, month + 1, 0).day;
+  }
+
+  /// get total seconds in a given month
+  static int secondsInMonth(int month, {int year = 2022}) {
+    var days = daysInMonth(month, year: 2022);
+
+    return days * 24 * 3600;
   }
 
   /// get total days in this month
