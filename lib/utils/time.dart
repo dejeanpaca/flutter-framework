@@ -255,6 +255,18 @@ extension TimeDateNullableUtils on DateTime? {
       return this!.compareTo(other!);
     }
   }
+
+  static DateTime? newer(DateTime? a, DateTime? b) {
+    var compared = a.compareNullable(b);
+
+    if (compared == 1) {
+      return a;
+    } else if (compared == -1) {
+      return b;
+    }
+
+    return a;
+  }
 }
 
 /// extensions for TimeOfDay
