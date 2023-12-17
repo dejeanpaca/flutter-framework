@@ -246,6 +246,12 @@ extension TimeDateUtils on DateTime {
     return this.year == 0 && this.month == 1 && this.day == 1 && this.hour == 0 && this.minute == 0 &&
         this.second == 0;
   }
+
+  /// is the value of the variable zero time (0/1/1 0:0:0)
+  bool isEpochTime() {
+    return this.year == 1970 && this.month == 1 && this.day == 1 && this.hour == 0 && this.minute == 0 &&
+        this.second == 0;
+  }
 }
 
 /// some helpful nullable DateTime extensions
