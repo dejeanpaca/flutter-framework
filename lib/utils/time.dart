@@ -240,6 +240,12 @@ extension TimeDateUtils on DateTime {
       millisecond == null ? this.millisecond : millisecond,
     );
   }
+
+  /// is the value of the variable zero time (0/1/1 0:0:0)
+  bool isZeroTime() {
+    return this.year == 0 && this.month == 1 && this.day == 1 && this.hour == 0 && this.minute == 0 &&
+        this.second == 0;
+  }
 }
 
 /// some helpful nullable DateTime extensions
