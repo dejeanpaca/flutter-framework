@@ -7,7 +7,13 @@ class SingleFireFunction {
   bool done = false;
   int instance = 0;
 
+  Future<void> Function()? onFire;
+
+  /// Run a given function.
+  /// [refire] can force to run again (may run concurrently if not [done])
   void fire(Future<void> Function() onFire, {bool refire = false}) {
+    this.onFire = onFire;
+
     if (refire) {
       fired = false;
       done = false;
@@ -26,6 +32,13 @@ class SingleFireFunction {
         await onFire();
         done = true;
       });
+    }
+  }
+
+  /// fire function again if it is fired at least once, and alread done
+  void fireAgain() {
+    if (done && onFire != null) {
+      fire(onFire!, refire: true);
     }
   }
 }
