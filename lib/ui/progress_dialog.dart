@@ -6,6 +6,7 @@ Future<void> showProgressDialog(BuildContext context, Future<dynamic> future,
 
   await showDialog(
     context: context,
+    useSafeArea: true,
     builder: (context) =>
         ProgressDialog(
           future,
@@ -30,6 +31,8 @@ Future<void> showProgressDialogNavigator(NavigatorState navigator, Future<void> 
 
 class ProgressDialog extends StatefulWidget {
   static String defaultMessage = 'Please wait ...';
+  static TextStyle? textStyle = TextStyle(fontSize: 18);
+  static Color? indicatorColor = Colors.blueAccent;
 
   @required
   final Future future;
@@ -69,13 +72,9 @@ class ProgressDialogState extends State<ProgressDialog> {
       });
     }
 
-    return WillPopScope(
+    return PopScope(
       child: buildDialog(context),
-      onWillPop: () {
-        return Future(() {
-          return false;
-        });
-      },
+      canPop: false,
     );
   }
 
@@ -87,14 +86,24 @@ class ProgressDialogState extends State<ProgressDialog> {
         : Center(
       heightFactor: 1.0,
       child: Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: Row(mainAxisSize: MainAxisSize.min, children: [
-            const CircularProgressIndicator(),
-            const Padding(
-              padding: EdgeInsets.only(right: 10.0),
+        padding: const EdgeInsets.all(25.0),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          SizedBox(
+            width: 30.0,
+            height: 30.0,
+            child: CircularProgressIndicator(
+              color: ProgressDialog.indicatorColor,
             ),
-            if (widget.message != null) Expanded(child: Text(widget.message!)),
-          ])),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(right: 10.0),
+          ),
+          if (widget.message != null)
+            Expanded(child:
+            Text(widget.message!, style: ProgressDialog.textStyle),
+            ),
+        ]),
+      ),
     );
 
     return Dialog(shape: shape, insetPadding: widget.insetPadding, child: content);
