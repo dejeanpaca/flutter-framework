@@ -36,9 +36,13 @@ class SingleFireFunction {
   }
 
   /// fire function again if it is fired at least once, and alread done
-  void fireAgain() {
-    if (done && onFire != null) {
-      fire(onFire!, refire: true);
+  void fireAgain({Future<void> Function()? onFire}) {
+    if (this.onFire == null && onFire != null) {
+      this.onFire = onFire;
+    }
+
+    if (done && this.onFire != null) {
+      fire(this.onFire!, refire: true);
     }
   }
 }
