@@ -143,6 +143,19 @@ extension TimeDateUtils on DateTime {
 
   /// get total days in a given month
   static int daysInMonth(int month, {int year = 2022}) {
+    // correct month/year if month outside of range
+    do {
+      if (month > 12) {
+        month = month - 12;
+        year = year + 1;
+        debugPrintStack();
+      } else if (month < 1) {
+        month = month + 12;
+        year = year - 1;
+        debugPrintStack();
+      }
+    } while (month < 1 || month > 12);
+
     return DateTime(year, month + 1, 0).day;
   }
 
