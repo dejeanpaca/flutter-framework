@@ -265,6 +265,11 @@ extension TimeDateUtils on DateTime {
     return this.year == 1970 && this.month == 1 && this.day == 1 && this.hour == 0 && this.minute == 0 &&
         this.second == 0;
   }
+
+  /// does a DateTime match a year/month/day
+  bool equalsYMD(int year, int month, int day) {
+    return this!.year == year && this!.month == month && this!.day == day;
+  }
 }
 
 /// some helpful nullable DateTime extensions
@@ -291,6 +296,15 @@ extension TimeDateNullableUtils on DateTime? {
     }
 
     return a;
+  }
+
+  /// does a nullable DateTime match a year/month/day
+  bool equalsNullableYMD(int year, int month, int day) {
+    if (this != null) {
+      return this!.year == year && this!.month == month && this!.day == day;
+    }
+
+    return false;
   }
 }
 
