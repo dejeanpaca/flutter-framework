@@ -274,6 +274,16 @@ extension TimeDateUtils on DateTime {
 
 /// some helpful nullable DateTime extensions
 extension TimeDateNullableUtils on DateTime? {
+  bool equalsNullable(DateTime? other) {
+    if (this == null && other == null) {
+      return true;
+    } else if (this != null && other != null) {
+      return this! == other!;
+    }
+
+    return false;
+  }
+
   int compareNullable(DateTime? other) {
     if (this == null && other == null) {
       return 0;
