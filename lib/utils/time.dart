@@ -31,26 +31,46 @@ extension TimeDateUtils on DateTime {
 
   /// is this month after the given one
   bool isMonthAfter(DateTime other) {
-    return (this.year > other.year) || (this.year == other.year && this.month > other.month);
+    int thisYear = this.year;
+    int otherYear = other.year;
+
+    return (thisYear > otherYear) || (thisYear == otherYear && this.month > other.month);
   }
 
   /// is the given month before this one
   bool isMonthBefore(DateTime other) {
-    return (this.year < other.year) || (this.year == other.year && this.month < other.month);
+    int thisYear = this.year;
+    int otherYear = other.year;
+
+    return (thisYear < otherYear) || (thisYear == otherYear && this.month < other.month);
   }
 
   /// is this day after a given other
   bool isDayAfter(DateTime other) {
-    return this.year > other.year ||
-        (this.year >= other.year && this.month > other.month) ||
-        (this.year >= other.year && this.month >= other.month && this.day > other.day);
+    int thisYear = this.year;
+    int otherYear = other.year;
+
+    if (thisYear > otherYear) return true;
+
+    int thisMonth = this.month;
+    int otherMonth = other.month;
+
+    return (thisYear >= otherYear && thisMonth > otherMonth) ||
+        (thisYear >= otherYear && thisMonth >= otherMonth && this.day > other.day);
   }
 
   /// is this day before a given other
   bool isDayBefore(DateTime other) {
-    return this.year < other.year ||
-        (this.year <= other.year && this.month < other.month) ||
-        (this.year <= other.year && this.month >= other.month && this.day < other.day);
+    int thisYear = this.year;
+    int otherYear = other.year;
+
+    if (thisYear < otherYear) return true;
+
+    int thisMonth = this.month;
+    int otherMonth = other.month;
+
+    return (thisYear <= otherYear && thisMonth < otherMonth) ||
+        (thisYear <= otherYear && thisMonth >= otherMonth && this.day < other.day);
   }
 
   /// is this day after or on the same day as a given other
