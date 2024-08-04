@@ -11,8 +11,12 @@ Future<void> setupPaths() async {
   var dir = await getApplicationDocumentsDirectory();
   documentsPath = dir.path;
 
-  dir = await getLibraryDirectory();
-  libraryPath = dir.path;
+  if (Platform.isIOS) {
+    dir = await getLibraryDirectory();
+    libraryPath = dir.path;
+  } else {
+    libraryPath = documentsPath;
+  }
 
   dir = await getTemporaryDirectory();
   temporaryPath = dir.path;
