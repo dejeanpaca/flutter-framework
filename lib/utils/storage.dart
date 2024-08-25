@@ -1,17 +1,22 @@
 import 'dart:io';
-import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
+/// where do we store documents
 var documentsPath = '';
+
+/// for other platforms than ios/macos this equates to documentsPath
 var libraryPath = '';
+
+/// temporary storage path
 var temporaryPath = '';
 
 Future<void> setupPaths() async {
   var dir = await getApplicationDocumentsDirectory();
   documentsPath = dir.path;
 
-  if (Platform.isIOS) {
+  if (Platform.isIOS || Platform.isMacOS) {
     dir = await getLibraryDirectory();
     libraryPath = dir.path;
   } else {
@@ -21,9 +26,11 @@ Future<void> setupPaths() async {
   dir = await getTemporaryDirectory();
   temporaryPath = dir.path;
 
-  print('Documents path: ' + documentsPath);
-  print('Library path: ' + libraryPath);
-  print('Temporary files path: ' + temporaryPath);
+  if (kDebugMode) {
+    print('storage > Documents path: ' + documentsPath);
+    if (documentsPath != libraryPath) print('storage > Library path: ' + libraryPath);
+    print('storage > Temporary files path: ' + temporaryPath);
+  }
 }
 
 /// delete the given file and prevent exceptions
