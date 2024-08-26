@@ -53,6 +53,8 @@ class DataStore {
       return false;
     }
 
+    if (kDebugMode) print('data store > exists at: ' + path);
+
     // directory already exists
     return true;
   }

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 
 import 'package:framework/utils/json_storage.dart' as jsonStorage;
 import 'package:framework/utils/storage.dart';
@@ -13,11 +12,16 @@ class StoredFile {
   /// name for this file (not the path)
   String fileName = 'file.json';
 
+  /// base path for this file, including trailing slash (defaults to $libraryPath if empty)
+  String basePath = '';
+
   StoredFile();
 
   /// get the storage path for this file
   String getPath() {
-    return documentsPath + '/$fileName';
+    if (basePath.isEmpty) return '$libraryPath/$fileName';
+
+    return '$basePath$fileName';
   }
 
   /// convert to json
@@ -82,7 +86,7 @@ class StoredFile {
 class StoredDataFile extends StoredFile {
   @override
   String getPath() {
-    return DataStore.getPath() + '/$fileName';
+    return '${DataStore.getPath()}/$fileName';
   }
 
   @override
