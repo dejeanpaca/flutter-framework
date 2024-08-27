@@ -12,16 +12,20 @@ class StoredFile {
   /// name for this file (not the path)
   String fileName = 'file.json';
 
-  /// base path for this file, including trailing slash (defaults to $libraryPath if empty)
+  /// base path for this file, excluding trailing slash (defaults to $libraryPath if empty)
   String basePath = '';
 
   StoredFile();
 
   /// get the storage path for this file
   String getPath() {
-    if (basePath.isEmpty) return '$libraryPath/$fileName';
+    if (basePath.isEmpty) {
+      if (DataStore.basePath.isNotEmpty) return '${DataStore.basePath}/$fileName';
 
-    return '$basePath$fileName';
+      return '$libraryPath/$fileName';
+    }
+
+    return '$basePath/$fileName';
   }
 
   /// convert to json

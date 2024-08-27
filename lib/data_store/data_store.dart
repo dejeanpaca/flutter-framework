@@ -12,16 +12,16 @@ class DataStore {
   static int storedVersion = 0;
 
   /// data path within the base path
-  static String dataPath = '/data';
+  static String dataPath = 'data';
 
-  /// base path where we store files
+  /// base path where we store files (excluding trailing slash)
   static String basePath = '';
 
   /// base path where we store files
   static String getPath() {
-    if (basePath.isEmpty) return libraryPath + dataPath;
+    if (basePath.isEmpty) return '$libraryPath/$dataPath';
 
-    return basePath + dataPath;
+    return '$basePath/$dataPath';
   }
 
   /// does the data store path exists
