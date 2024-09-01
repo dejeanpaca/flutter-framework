@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:framework/utils/storage.dart';
+import 'package:path/path.dart' as path;
 
 /// Data store manages the important user data (the things which we want to keep)
 class DataStore {
@@ -17,11 +18,18 @@ class DataStore {
   /// base path where we store files (excluding trailing slash)
   static String basePath = '';
 
-  /// base path where we store files
-  static String getPath() {
-    if (basePath.isEmpty) return '$libraryPath/$dataPath';
+  /// base path where we store all files
+  static String getBasePath() {
+    if (basePath.isEmpty) return libraryPath;
 
-    return '$basePath/$dataPath';
+    return basePath;
+  }
+
+  /// path where we store data files
+  static String getPath() {
+    if (basePath.isEmpty) return path.join(libraryPath, dataPath);
+
+    return path.join(basePath, dataPath);
   }
 
   /// does the data store path exists
