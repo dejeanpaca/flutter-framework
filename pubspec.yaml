@@ -1,8 +1,8 @@
 name: framework
 description: A flutter framework
-# don't publish this package yet
+# not a publishable package
 publish_to: 'none'
-version: 0.5.0
+version: 0.6.0
 homepage: https://fiesta-labs.com
 
 environment:
