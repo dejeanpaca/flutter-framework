@@ -88,19 +88,20 @@ class Requests {
   static List<String> expectedContentTypes = ['application/json'];
   static Duration timeoutDuration = const Duration(seconds: 3);
 
-  static Future<RequestResponse> request(RequestMethod method,
-      String url, {
-        String? body,
-        Map<String, String>? headers,
-        bool multipart = false,
-        bool form = false,
-        List<http.MultipartFile>? files,
-        Map<String, String>? fields,
-        List<String>? expectedContentTypes,
-        String? acceptType,
-        bool isJsonArray = false,
-        Duration? timeout,
-      }) async {
+  static Future<RequestResponse> request(
+    RequestMethod method,
+    String url, {
+    String? body,
+    Map<String, String>? headers,
+    bool multipart = false,
+    bool form = false,
+    List<http.MultipartFile>? files,
+    Map<String, String>? fields,
+    List<String>? expectedContentTypes,
+    String? acceptType,
+    bool isJsonArray = false,
+    Duration? timeout,
+  }) async {
     DateTime? start;
 
     if (log) start = DateTime.now();
@@ -207,13 +208,11 @@ class Requests {
       if (response == null) {
         print('response > No response (timeout)');
       } else {
-        print(
-            'response > Error. Status code:  ($statusCode),$errorContentType content length: $contentLength');
+        print('response > Error. Status code:  ($statusCode),$errorContentType content length: $contentLength');
       }
     } else {
       reqOk = true;
-      if (log) print(
-          'response > Status code:  ($statusCode),$errorContentType content length: $contentLength');
+      if (log) print('response > Status code:  ($statusCode),$errorContentType content length: $contentLength');
     }
 
     try {
@@ -299,7 +298,6 @@ class Requests {
     } else {
       contains = true;
     }
-
 
     if (contains) {
       response.isExpectedContentType = true;

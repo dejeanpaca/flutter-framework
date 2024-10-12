@@ -7,13 +7,12 @@ Future<void> showProgressDialog(BuildContext context, Future<dynamic> future,
   await showDialog(
     context: context,
     useSafeArea: true,
-    builder: (context) =>
-        ProgressDialog(
-          future,
-          content: content,
-          message: message,
-          shape: dialogShape,
-        ),
+    builder: (context) => ProgressDialog(
+      future,
+      content: content,
+      message: message,
+      shape: dialogShape,
+    ),
     barrierDismissible: dismissible,
   );
 }
@@ -27,7 +26,6 @@ Future<void> showProgressDialogNavigator(NavigatorState navigator, Future<void> 
     return future;
   }
 }
-
 
 class ProgressDialog extends StatefulWidget {
   static String defaultMessage = 'Please wait ...';
@@ -43,13 +41,14 @@ class ProgressDialog extends StatefulWidget {
   final ShapeBorder? shape;
   final EdgeInsets insetPadding;
 
-  const ProgressDialog(this.future, {
-    Key? key,
+  const ProgressDialog(
+    this.future, {
+    super.key,
     this.message,
     this.content,
     this.shape,
     this.insetPadding = const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => ProgressDialogState();
@@ -63,7 +62,11 @@ class ProgressDialogState extends State<ProgressDialog> {
     if (!futureHooked) {
       futureHooked = true;
 
-      widget.future.then((value) {
+      Future<void> process = () async {
+        await widget.future;
+      } as Future<void>;
+
+      process.then((value) {
         Navigator.pop(context);
       }).catchError((err, stackTrace) {
         debugPrint('Error during progress ${err.toString()} dialog');
@@ -73,8 +76,8 @@ class ProgressDialogState extends State<ProgressDialog> {
     }
 
     return PopScope(
-      child: buildDialog(context),
       canPop: false,
+      child: buildDialog(context),
     );
   }
 
@@ -84,27 +87,27 @@ class ProgressDialogState extends State<ProgressDialog> {
     Widget content = widget.content != null
         ? widget.content!
         : Center(
-      heightFactor: 1.0,
-      child: Padding(
-        padding: const EdgeInsets.all(25.0),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          SizedBox(
-            width: 30.0,
-            height: 30.0,
-            child: CircularProgressIndicator(
-              color: ProgressDialog.indicatorColor,
+            heightFactor: 1.0,
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                SizedBox(
+                  width: 30.0,
+                  height: 30.0,
+                  child: CircularProgressIndicator(
+                    color: ProgressDialog.indicatorColor,
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(right: 10.0),
+                ),
+                if (widget.message != null)
+                  Expanded(
+                    child: Text(widget.message!, style: ProgressDialog.textStyle),
+                  ),
+              ]),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(right: 10.0),
-          ),
-          if (widget.message != null)
-            Expanded(child:
-            Text(widget.message!, style: ProgressDialog.textStyle),
-            ),
-        ]),
-      ),
-    );
+          );
 
     return Dialog(shape: shape, insetPadding: widget.insetPadding, child: content);
   }
