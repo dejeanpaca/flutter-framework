@@ -8,7 +8,7 @@ Future<Map<String, dynamic>?> loadJson(String fileName, {bool logVerbose = false
   Map<String, dynamic>? result;
 
   if (await file.exists() == false) {
-    if (logVerbose) print('load > Does not exist: ' + fileName);
+    if (logVerbose) print('load > Does not exist: $fileName');
     return null;
   }
 
@@ -18,13 +18,13 @@ Future<Map<String, dynamic>?> loadJson(String fileName, {bool logVerbose = false
     if (s.isNotEmpty) {
       result = json.decode(s);
 
-      if (logVerbose) print('load > json: ' + fileName);
+      if (logVerbose) print('load > json: $fileName');
     } else {
-      if (logVerbose) print('load > json empty: ' + fileName);
+      if (logVerbose) print('load > json empty: $fileName');
     }
   } catch (e) {
     result = null;
-    if (logVerbose) print('load > failed: ' + fileName);
+    if (logVerbose) print('load > failed: $fileName');
     print(e.toString());
   }
 
@@ -38,7 +38,7 @@ Future<bool> saveJson<T>(String fileName, T what, {bool logVerbose = false, bool
   try {
     contents = json.encode(what);
   } catch (e, s) {
-    if (logVerbose) print('save > failed to encode: ' + fileName);
+    if (logVerbose) print('save > failed to encode: $fileName');
     print(e.toString());
     debugPrintStack(stackTrace: s);
 
@@ -51,11 +51,11 @@ Future<bool> saveJson<T>(String fileName, T what, {bool logVerbose = false, bool
     try {
       await file.writeAsString(contents, flush: flush);
 
-      if (logVerbose) print('save > json: ' + fileName + ' as ' + T.toString());
+      if (logVerbose) print('save > json: $fileName as $T');
 
       result = true;
     } catch (e, s) {
-      if (logVerbose) print('save > failed: ' + fileName);
+      if (logVerbose) print('save > failed: $fileName');
       print(e.toString());
       debugPrintStack(stackTrace: s);
 

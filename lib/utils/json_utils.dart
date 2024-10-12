@@ -18,7 +18,7 @@ class JsonUtils {
 
     if (value is String) {
       var v = int.tryParse(value);
-      return v != null ? v : defaultValue;
+      return v ?? defaultValue;
     } else if (value is int) {
       return value;
     }
@@ -189,7 +189,7 @@ class JsonUtils {
 
   static List<int> getInts(dynamic jsn) {
     if (jsn != null && jsn is Iterable<dynamic>) {
-      return List<int>.from(jsn as Iterable<dynamic>);
+      return List<int>.from(jsn);
     }
 
     return [];
@@ -198,12 +198,12 @@ class JsonUtils {
   static List<String> getStrings(dynamic jsn) {
     var strings = getStringsNullable(jsn);
 
-    return strings != null ? strings : [];
+    return strings ?? [];
   }
 
   static List<String>? getStringsNullable(dynamic jsn) {
     if (jsn != null && jsn is Iterable<dynamic>) {
-      return List<String>.from(jsn as Iterable<dynamic>);
+      return List<String>.from(jsn);
     }
 
     return null;

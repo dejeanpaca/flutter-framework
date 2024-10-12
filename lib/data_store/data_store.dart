@@ -7,7 +7,7 @@ import 'package:path/path.dart' as path;
 /// Data store manages the important user data (the things which we want to keep)
 class DataStore {
   /// current data store version
-  static const int Version = 1;
+  static const int version = 1;
 
   /// loaded data store version
   static int storedVersion = 0;
@@ -49,11 +49,11 @@ class DataStore {
       try {
         d.createSync();
 
-        print('Created data store path: ' + path);
+      print('Created data store path: $path');
 
         return true;
       } catch (e) {
-        print('Failed to create data store path: ' + path);
+        print('Failed to create data store path: $path');
         print(e.toString());
       }
 
@@ -61,7 +61,7 @@ class DataStore {
       return false;
     }
 
-    if (kDebugMode) print('data store > exists at: ' + path);
+    if (kDebugMode) print('data store > exists at: $path');
 
     // directory already exists
     return true;

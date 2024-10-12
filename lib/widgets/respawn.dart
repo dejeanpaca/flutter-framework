@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 class Respawn extends StatefulWidget {
   final Widget child;
 
-  Respawn({Key? key, required this.child}) : super(key: key);
+  const Respawn({super.key, required this.child});
 
   @override
-  _RespawnState createState() => _RespawnState();
+  RespawnState createState() => RespawnState();
 
   static respawn(BuildContext context) {
-    context.findAncestorStateOfType<_RespawnState>()!.respawn();
+    context.findAncestorStateOfType<RespawnState>()!.respawn();
   }
 }
 
-class _RespawnState extends State<Respawn> {
+class RespawnState extends State<Respawn> {
   Key _key = UniqueKey();
 
   void respawn() {

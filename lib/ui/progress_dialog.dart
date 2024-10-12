@@ -62,16 +62,18 @@ class ProgressDialogState extends State<ProgressDialog> {
     if (!futureHooked) {
       futureHooked = true;
 
+      var navigator = Navigator.of(context);
+
       Future<void> process = () async {
         await widget.future;
       } as Future<void>;
 
       process.then((value) {
-        Navigator.pop(context);
+        navigator.pop();
       }).catchError((err, stackTrace) {
         debugPrint('Error during progress ${err.toString()} dialog');
         debugPrintStack(stackTrace: stackTrace);
-        Navigator.pop(context);
+        navigator.pop();
       });
     }
 

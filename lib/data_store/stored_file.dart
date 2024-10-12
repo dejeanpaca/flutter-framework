@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:framework/utils/json_storage.dart' as jsonStorage;
+import 'package:framework/utils/json_storage.dart' as json_storage;
 import 'package:framework/utils/storage.dart';
 
 import 'data_store.dart';
@@ -44,7 +44,7 @@ class StoredFile {
     var filePath = getPath();
 
     // just write the file
-    var ok = await jsonStorage.saveJson(filePath, what, logVerbose: logVerbose);
+    var ok = await json_storage.saveJson(filePath, what, logVerbose: logVerbose);
 
     return ok;
   }
@@ -56,7 +56,7 @@ class StoredFile {
 
   /// load this file
   Future<void> load() async {
-    var json = await jsonStorage.loadJson(getPath(), logVerbose: logVerbose);
+    var json = await json_storage.loadJson(getPath(), logVerbose: logVerbose);
 
     if (json != null) await onLoad(json);
   }

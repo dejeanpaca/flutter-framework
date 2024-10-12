@@ -27,9 +27,9 @@ Future<void> setupPaths() async {
   temporaryPath = dir.path;
 
   if (kDebugMode) {
-    print('storage > Documents path: ' + documentsPath);
-    if (documentsPath != libraryPath) print('storage > Library path: ' + libraryPath);
-    print('storage > Temporary files path: ' + temporaryPath);
+    print('storage > Documents path: $documentsPath');
+    if (documentsPath != libraryPath) print('storage > Library path: $libraryPath');
+    print('storage > Temporary files path: $temporaryPath');
   }
 }
 
@@ -42,7 +42,9 @@ Future<bool> deleteFile(path) async {
   try {
     await f.delete();
     ok = true;
-  } catch (e) {}
+  } catch (e) {
+    ok = false;
+  }
 
   return ok;
 }

@@ -6,7 +6,7 @@ typedef DynamicThemeDataWidgetBuilder = Widget Function(BuildContext context, Ap
 typedef ThemeDataBuilder = AppTheme Function(AppTheme? theme);
 
 class DynamicThemeMode extends StatefulWidget {
-  const DynamicThemeMode({Key? key, this.data, this.child}) : super(key: key);
+  const DynamicThemeMode({super.key, this.data, this.child});
 
   /// Builder that gets called when the theme mode changes
   final DynamicThemeDataWidgetBuilder? child;

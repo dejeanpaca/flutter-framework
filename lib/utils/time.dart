@@ -6,114 +6,104 @@ extension TimeDateUtils on DateTime {
   static DateTime zero = DateTime(1970, 1, 1, 0, 0, 0);
 
   bool isSameDay(DateTime other) {
-    return this.year == other.year && this.month == other.month && this.day == other.day;
+    return year == other.year && month == other.month && day == other.day;
   }
 
   bool isSameMonth(DateTime other) {
-    return this.year == other.year && this.month == other.month;
+    return year == other.year && month == other.month;
   }
 
   bool isSameYear(DateTime other) {
-    return this.year == other.year;
+    return year == other.year;
   }
 
   /// is this date a day before the given day
   bool isYesterday(DateTime today) {
     var yesterday = DateTime(today.year, today.month, today.day - 1);
-    return this.isSameDay(yesterday);
+    return isSameDay(yesterday);
   }
 
   /// is this date one day after the given day
   bool isTomorrow(DateTime today) {
     var tomorrow = DateTime(today.year, today.month, today.day + 1);
-    return tomorrow.year == this.year && tomorrow.month == this.month && tomorrow.day == this.day;
+    return tomorrow.year == year && tomorrow.month == month && tomorrow.day == day;
   }
 
   /// is this month after the given one
   bool isMonthAfter(DateTime other) {
-    int thisYear = this.year;
+    int thisYear = year;
     int otherYear = other.year;
 
-    return (thisYear > otherYear) || (thisYear == otherYear && this.month > other.month);
+    return (thisYear > otherYear) || (thisYear == otherYear && month > other.month);
   }
 
   /// is the given month before this one
   bool isMonthBefore(DateTime other) {
-    int thisYear = this.year;
+    int thisYear = year;
     int otherYear = other.year;
 
-    return (thisYear < otherYear) || (thisYear == otherYear && this.month < other.month);
+    return (thisYear < otherYear) || (thisYear == otherYear && month < other.month);
   }
 
   /// is this day after a given other
   bool isDayAfter(DateTime other) {
-    int thisYear = this.year;
+    int thisYear = year;
     int otherYear = other.year;
 
     if (thisYear > otherYear) return true;
 
-    int thisMonth = this.month;
+    int thisMonth = month;
     int otherMonth = other.month;
 
     return (thisYear >= otherYear && thisMonth > otherMonth) ||
-        (thisYear >= otherYear && thisMonth >= otherMonth && this.day > other.day);
+        (thisYear >= otherYear && thisMonth >= otherMonth && day > other.day);
   }
 
   /// is this day before a given other
   bool isDayBefore(DateTime other) {
-    int thisYear = this.year;
+    int thisYear = year;
     int otherYear = other.year;
 
     if (thisYear < otherYear) return true;
 
-    int thisMonth = this.month;
+    int thisMonth = month;
     int otherMonth = other.month;
 
     return (thisYear <= otherYear && thisMonth < otherMonth) ||
-        (thisYear <= otherYear && thisMonth >= otherMonth && this.day < other.day);
+        (thisYear <= otherYear && thisMonth >= otherMonth && day < other.day);
   }
 
   /// is this day after or on the same day as a given other
   bool isSameDayOrAfter(DateTime other) {
-    return this.isDayAfter(other) || this.isSameDay(other);
+    return isDayAfter(other) || isSameDay(other);
   }
 
   /// is this day before or on the same day as a given other
   bool isSameDayOrBefore(DateTime other) {
-    return this.isDayBefore(other) || this.isSameDay(other);
+    return isDayBefore(other) || isSameDay(other);
   }
-
 
   /// find the first day of the week this day is part of
   DateTime firstDateOfTheWeek() {
-    var date = this.subtract(Duration(days: this.weekday - 1));
+    var date = subtract(Duration(days: weekday - 1));
     return DateTime(date.year, date.month, date.day);
   }
 
   /// find the last date of the week this day is part of
   DateTime lastDateOfTheWeek() {
-    var date = this.add(Duration(days: DateTime.daysPerWeek - this.weekday));
+    var date = add(Duration(days: DateTime.daysPerWeek - weekday));
     return DateTime(date.year, date.month, date.day);
   }
 
   /// return same time that occurs on the given day
   DateTime getOnDay(DateTime today) {
-    return DateTime(
-        today.year,
-        today.month,
-        today.day,
-        this.hour,
-        this.minute,
-        this.second,
-        this.millisecond
-    );
+    return DateTime(today.year, today.month, today.day, hour, minute, second, millisecond);
   }
 
   /// return same date that occurs with the given time of day
   DateTime withTimeOfDay(TimeOfDay time) {
-    return DateTime(this.year, this.month, this.day, time.hour, time.minute);
+    return DateTime(year, month, day, time.hour, time.minute);
   }
-
 
   /// return DateTime as a TimeOfDay
   TimeOfDay getTimeOfDay() {
@@ -146,7 +136,7 @@ extension TimeDateUtils on DateTime {
     return n >= 10 ? '$n' : '0$n';
   }
 
-  /// Creates a more compact iso 8601 string without mili and microseconds.
+  /// Creates a more compact iso 8601 string without milliseconds and microseconds.
   String toCompactIso8601String() {
     String y = (year >= -9999 && year <= 9999) ? fourDigits(year) : sixDigits(year);
     String m = twoDigits(month);
@@ -155,10 +145,11 @@ extension TimeDateUtils on DateTime {
     String min = twoDigits(minute);
     String sec = twoDigits(second);
 
-    if (isUtc)
+    if (isUtc) {
       return '$y-$m-${d}T$h:$min:${sec}Z';
-    else
+    } else {
       return '$y-$m-${d}T$h:$min:$sec';
+    }
   }
 
   /// get total days in a given month
@@ -191,7 +182,6 @@ extension TimeDateUtils on DateTime {
     return DateTime(year, month, daysInMonth(month, year: year));
   }
 
-
   /// check if a year is a leap year
   static bool isLeapYear(int year) {
     return (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
@@ -203,9 +193,7 @@ extension TimeDateUtils on DateTime {
   }
 
   static int daysInYearSoFar(DateTime day) {
-    return day
-        .difference(DateTime(day.year, 1, 1))
-        .inDays;
+    return day.difference(DateTime(day.year, 1, 1)).inDays;
   }
 
   /// Calculates number of weeks for a given year as per
@@ -220,10 +208,10 @@ extension TimeDateUtils on DateTime {
   /// https://en.wikipedia.org/wiki/ISO_week_date#Calculation
   int weekNumber() {
     int dayOfYear = int.parse(DateFormat("D").format(this));
-    int woy = ((dayOfYear - this.weekday + 10) / 7).floor();
+    int woy = ((dayOfYear - weekday + 10) / 7).floor();
     if (woy < 1) {
-      woy = numOfWeeks(this.year - 1);
-    } else if (woy > numOfWeeks(this.year)) {
+      woy = numOfWeeks(year - 1);
+    } else if (woy > numOfWeeks(year)) {
       woy = 1;
     }
     return woy;
@@ -236,59 +224,57 @@ extension TimeDateUtils on DateTime {
     return diff.elapsed();
   }
 
-  int elapsedInMiliseconds() {
+  int elapsedInMilliseconds() {
     var end = DateTime.now();
     var diff = end.difference(this);
     return diff.inMilliseconds;
   }
 
   DateTime clone({
-    int? year = null,
-    int? month = null,
-    int? day = null,
-    int? hour = null,
-    int? minute = null,
-    int? second = null,
-    int? millisecond = null,
-    bool? isUtc = null,
+    int? year,
+    int? month,
+    int? day,
+    int? hour,
+    int? minute,
+    int? second,
+    int? millisecond,
+    bool? isUtc,
   }) {
-    if (isUtc == null ? this.isUtc : isUtc) {
+    if (isUtc ?? this.isUtc) {
       return DateTime.utc(
-        year == null ? this.year : year,
-        month == null ? this.month : month,
-        day == null ? this.day : day,
-        hour == null ? this.hour : hour,
-        minute == null ? this.minute : minute,
-        second == null ? this.second : second,
-        millisecond == null ? this.millisecond : millisecond,
+        year ?? this.year,
+        month ?? this.month,
+        day ?? this.day,
+        hour ?? this.hour,
+        minute ?? this.minute,
+        second ?? this.second,
+        millisecond ?? this.millisecond,
       );
     }
     return DateTime(
-      year == null ? this.year : year,
-      month == null ? this.month : month,
-      day == null ? this.day : day,
-      hour == null ? this.hour : hour,
-      minute == null ? this.minute : minute,
-      second == null ? this.second : second,
-      millisecond == null ? this.millisecond : millisecond,
+      year ?? this.year,
+      month ?? this.month,
+      day ?? this.day,
+      hour ?? this.hour,
+      minute ?? this.minute,
+      second ?? this.second,
+      millisecond ?? this.millisecond,
     );
   }
 
   /// is the value of the variable zero time (0/1/1 0:0:0)
   bool isZeroTime() {
-    return this.year == 0 && this.month == 1 && this.day == 1 && this.hour == 0 && this.minute == 0 &&
-        this.second == 0;
+    return year == 0 && month == 1 && day == 1 && hour == 0 && minute == 0 && second == 0;
   }
 
   /// is the value of the variable zero time (0/1/1 0:0:0)
   bool isEpochTime() {
-    return this.year == 1970 && this.month == 1 && this.day == 1 && this.hour == 0 && this.minute == 0 &&
-        this.second == 0;
+    return year == 1970 && month == 1 && day == 1 && hour == 0 && minute == 0 && second == 0;
   }
 
   /// does a DateTime match a year/month/day
   bool equalsYMD(int year, int month, int day) {
-    return this!.year == year && this!.month == month && this!.day == day;
+    return this.year == year && this.month == month && this.day == day;
   }
 }
 
@@ -298,7 +284,7 @@ extension TimeDateNullableUtils on DateTime? {
     if (this == null && other == null) {
       return true;
     } else if (this != null && other != null) {
-      return this! == other!;
+      return this! == other;
     }
 
     return false;
@@ -342,13 +328,13 @@ extension TimeDateNullableUtils on DateTime? {
 extension TimeOfDayUtils on TimeOfDay {
   /// get ToD formatted as a time string
   String getTimeString() {
-    return this.hour.toString() + ':' + this.minute.toString().padLeft(2, '0');
+    return '$hour:${minute.toString().padLeft(2, '0')}';
   }
 
   /// Return DateTime for this TimeOfDay.
   /// Sets year, month and day from now, and only hour and minute from this TimeOfDay.
   DateTime getTime(DateTime now) {
-    return DateTime(now.year, now.month, now.day, this.hour, this.minute);
+    return DateTime(now.year, now.month, now.day, hour, minute);
   }
 
   /// checks if this ToD is before the other
@@ -376,7 +362,7 @@ extension TimeOfDayUtils on TimeOfDay {
 extension DurationUtils on Duration {
   /// format duration into Hm representation
   String formatHm() {
-    var d = DateTime(1970, 1, 1, 0, 0, this.inSeconds);
+    var d = DateTime(1970, 1, 1, 0, 0, inSeconds);
     return DateFormat.Hm().format(d);
   }
 
