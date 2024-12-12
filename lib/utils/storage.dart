@@ -49,6 +49,27 @@ Future<bool> deleteFile(path) async {
   return ok;
 }
 
+/// remove a directory with the given path
+Future<bool> removeDirectory(String path) async {
+  bool ok = false;
+
+  // remove old contents (if any)
+  try {
+    var dir = Directory(path);
+
+    if (dir.existsSync()) {
+      dir.deleteSync(recursive: true);
+    }
+
+    ok = true;
+  } catch (e) {
+    ok = false;
+  }
+
+  return ok;
+}
+
+
 Future<bool> saveFileAsString(String fileName, String contents) async {
   final File file = File(fileName);
 
